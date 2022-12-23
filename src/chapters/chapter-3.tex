@@ -1,5 +1,17 @@
 \chapter{Rencana Penyelesaian Masalah}
 
-Tujuan utama penulisan bab ini adalah untuk menguraikan rencana penyelesaian masalah tugas akhir yang akan dieksekusi secara utuh pada saat pelaksanaan Tugas Akhir II. Bab ini merupakan bab penutup Laporan Tugas Akhir I yang dapat dipandang sebagai bab yang akan menjembatani perpindahan ke proses pelaksanaan Tugas Akhir II. Pengembangan lebih lanjut dari bab ini dapat menjadi bagian dari bab Deskripsi Solusi pada Laporan Tugas Akhir.
+\section{Analisis Masalah}
 
-\blindtext
+Pelaksanaan pembelajaran pada lingkungan terdistribusi membutuhkan komunikasi untuk melakukan sinkronisasi bobot. Kebutuhan sinkronisasi dapat menjadi penghambat pembelajaran karena perlunya saling menunggu. Selain itu, adanya batasan \emph{bandwidth} juga mengharuskan pengurangan komunikasi. Oleh karena itu, penelitian dari \textcite{Chen2021CADA} mencoba untuk mengurangi \emph{bandwidth} yang digunakan dalam melakukan sinkronisasi. Selain itu, terdapat penelitian dari \textcite{Chen2022Efficient} yang mengurangi jumlah komunikasi yang diperlukan untuk sinkronisasi bobot. Keduanya menggunakan pendekatan yang berbeda untuk mengurangi hambatan pembelajaran yang muncul akibat komunikasi yang diperlukan. Namun, belum ada modifikasi untuk pengoptimasi Adam yang menggunakan kedua konsep tersebut untuk lebih jauh mengurangi hambatan komunikasi.
+
+Konsep pengurangan komunikasi dan kuantisasi dapat digabungkan menjadi satu algoritma pengoptimasi yang lebih efisien. Namun, hasil penggabungan keduanya tidak dapat dipastikan konvergen. Selain itu, perlu untuk membandingkan penggunaan \emph{bandwidth} antara algoritma hasil perancangan dengan algoritma dari \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient}.
+
+\section{Analisis Solusi}
+Untuk menyelesaikan masalah yang telah dituliskan pada subbab sebelumnya, maka akan dirancang suatu algoritma untuk mengoptimasi penggunaan bandwidth dan komunikasi bagi pengoptimasi Adam pada lingkungan terdistribusi. Optimasi komunikasi dan penggunaan bandwidth dapat dilakukan dengan menggunakan teknik yang digunakan pada \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient} secara berurutan.
+
+Pengoptimasi yang dirancang akan didasarkan pada pengoptimasi Adam. Pengoptimasi Adam dipilih sebagai dasar karena pengoptimasi tersebut merupakan pilihan yang umum digunakan dalam berbagai kasus. Selanjutnya, kuantisasi akan dilakukan dengan teknik yang dijelaskan oleh \textcite{Chen2021CADA}. Setelah kuantisasi dilakukan pada parameter, pengurangan komunikasi dapat dilakukan dengan menggunakan teknik yang dijelaskan oleh \textcite{Chen2022Efficient}. Kedua optimasi dilakukan untuk mengurangi lebih jauh batasan kecepatan pembelajaran yang muncul akibat komunikasi.
+
+Hasil implementasi kemudian akan diuji menggunakan permasalahan klasifikasi citra dengan melatih model ResNet-18 dengan dataset CIFAR100. Pengujian akan melihat jumlah bit yang digunakan dalam komunikasi, serta konvergensi model yang dilatih. Selain itu, akan dicoba juga teknik yang dideskripsikan \textcite{Chen2021CADA} serta \textcite{Chen2022Efficient}, serta membandingkan hasil dari penelitian sebelumnya dengan hasil yang diimplementasi.
+
+\section{Rancangan Penyelesaian Masalah}
+Rancangan solusi akan dibuat di atas TensorFlow. Pemilihan TensorFlow didasarkan pada kemudahan akses pustaka TensorFlow serta abstraksi untuk pembelajaran pada unit komputasi. Pengembangan modifikasi pengoptimasi Adam akan dilakukan dengan membuat \emph{custom optimizer}. Kemudian, semua logika yang dirancang akan dimasukkan kedalamnya.

@@ -20,18 +20,19 @@
 
 % Judul bahasa Indonesia
 \usepackage[bahasa]{babel}
+\usepackage[bahasa]{translator}
 
 % Format citation
-\usepackage[style=apa,backend=biber]{biblatex}
-
 \usepackage[utf8]{inputenc}
+
+\usepackage[style=apa,backend=biber]{biblatex}
 \usepackage{graphicx}
 \usepackage{titling}
 \usepackage{blindtext}
 \usepackage{sectsty}
 \usepackage{chngcntr}
 \usepackage{etoolbox}
-\usepackage{hyperref}       % Package untuk link di daftar isi. Ubah jadi \usepackage[hidelinks]{hyperref} apabila ingin menghilangkan kotak merah disekitar link
+\usepackage[hidelinks]{hyperref}       % Package untuk link di daftar isi. Ubah jadi \usepackage[hidelinks]{hyperref} apabila ingin menghilangkan kotak merah disekitar link
 \usepackage{titlesec}       % Package Format judul
 \usepackage{titletoc}       % Package Format judul di toc
 \usepackage{tocbibind}      % Package untuk masukkan toc, lot, lof ke Daftar Isi
@@ -39,8 +40,27 @@
 \usepackage{parskip}
 \usepackage{afterpage}
 \usepackage{relsize}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{pgfgantt}
+\usepackage[
+  mode=buildnew]{standalone}
+
+
+\input{config/hypenation-id.sty}
+\usedictionary{translator-month-dictionary}
 
 \graphicspath{{resources/}}   % letak direktori penyimpanan gambar
+
+% Setting titik di daftar isi
+\makeatletter
+\renewcommand*{\@dotsep}{1.7}
+\makeatother
 
 % Setting daftar lampiran
 \newcommand*{\lopname}{DAFTAR LAMPIRAN}
@@ -70,7 +90,7 @@
     {\bfseries}
     {Lampiran \thecontentslabel.\quad}
     {}
-    {\hfill\contentspage}
+    {\textmd{\dotfill}\contentspage}
 
   \titleformat{\chapter}[block]
     {\bfseries}
@@ -78,30 +98,25 @@
     {\bfseries}
 }
 
-% Hilangkan titik pada toc
-\makeatletter
-\renewcommand{\@dotsep}{10000} 
-\makeatother
-
 % Setel title pada chapter-chapter di toc, lof, lot
 \titlecontents{chapter}
   [0pt]
   {\bfseries}
   {\MakeUppercase{Bab} \thecontentslabel\quad\uppercase}
   {}
-  {\hfill\contentspage}
+  {\textmd{\dotfill}\contentspage}
 \titlecontents{figure}
   [0pt]
   {}
-  {Gambar \thecontentslabel.\quad}
+  {Gambar \thecontentslabel.\quad \enspace}
   {}
-  {\hfill\contentspage}
+  {\dotfill\contentspage}
 \titlecontents{table}
   [0pt]
   {}
-  {Tabel \thecontentslabel.\quad}
+  {Tabel \thecontentslabel.\quad \enspace}
   {}
-  {\hfill\contentspage}
+  {\dotfill\contentspage}
 
 % Masukin Daftar Pustaka ke toc
 \let\originalprintbibliography\printbibliography
@@ -135,3 +150,9 @@
 
 % Define blank page
 \newcommand*{\blankpage}{\afterpage{\null\newpage}}
+
+% Define algorithm caption
+\floatname{algorithm}{Algoritma}
+
+% Definisi hyphen
+\newcommand{\+}{\hyp}
