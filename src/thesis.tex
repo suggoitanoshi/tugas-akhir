@@ -2,7 +2,7 @@
 %
 % Berkas utama templat LaTeX.
 %
-% author Petra Barus, Peb Ruswono Aryan, Faris Rizki Ekananda
+% author Petra Barus, Peb Ruswono Aryan, Faris Rizki Ekananda, Fransiskus Febryan Suryawan
 %
 %--------------------------------------------------------------------%
 %
@@ -23,11 +23,11 @@
 \begin{document}
 
 %Basic configuration
-\title{INSERT\_JUDUL\_TA}
+\title{PERANCANGAN DAN IMPLEMENTASI MODIFIKASI PENGOPTIMASI ADAM UNTUK \emph{DEEP LEARNING} TERDISTRIBUSI}
 \date{}
 \author{
-    Faris Rizki Ekananda \\
-    NIM : 13518125
+    Fransiskus Febryan Suryawan \\
+    NIM : 13519124
 }
 
 \pagenumbering{roman}
@@ -35,7 +35,7 @@
 
 \input{chapters/cover}
 \input{chapters/approval-1} % 1 PEMBIMBING PAKAI INI
-\input{chapters/approval-2} % 2 PEMBIMBING PAKAI INI
+% \input{chapters/approval-2} % 2 PEMBIMBING PAKAI INI
 % \input{chapters/statement}
 
 \pagestyle{plain}
@@ -54,9 +54,9 @@
 \renewcommand{\bibname}{DAFTAR PUSTAKA}
 
 \tableofcontents
-\listofappendices
+% \listofappendices
 \listoffigures
-\listoftables
+% \listoftables
 
 \newpage
 
@@ -76,9 +76,7 @@
 % Untuk menambahkan daftar bab, buat berkas bab misalnya `chapter-6` di direktori `chapters`, dan masukkan ke sini.
 %----------------------------------------------------------------%
 \input{chapters/chapter-1}
-\blankpage
 \input{chapters/chapter-2}
-\blankpage
 \input{chapters/chapter-3}
 % \input{chapters/chapter-4}
 % \input{chapters/chapter-5}
@@ -86,7 +84,7 @@
 
 % Daftar pustaka
 \printbibliography
-\blankpage
+% \blankpage
 
 % Setting judul lampiran
 \titlespacing*{\chapter}{0pt}{0pt}{0pt}
@@ -96,8 +94,8 @@
 \titleformat*{\section}{\bfseries}
 
 % Index
-\appendix
-\input{chapters/appendix-1.tex}
-\input{chapters/appendix-2.tex}
+% \appendix
+% \input{chapters/appendix-1.tex}
+% \input{chapters/appendix-2.tex}
 
 \end{document}

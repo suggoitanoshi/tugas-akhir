@@ -3,39 +3,48 @@
   "latex-workshop.latex.recipe.default": "lastUsed",
   "latex-workshop.latex.recipes": [
     {
-      "name": "latex_itb_ta WINDOWS",
-      "tools": ["latex_itb_make", "latex_itb_del", "latex_itb_move"]
+      "name": "Build TA",
+      "tools": ["latex_report_make"]
+    },
+    {
+      "name": "Build current file",
+      "tools": ["latex_current_make"]
     }
   ],
   "latex-workshop.latex.tools": [
     {
-      "name": "latex_itb_make",
+      "name": "latex_report_make",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-shell-escape",
+        "-pdf",
+        "-bibtex",
+        "-outdir=%OUTDIR%",
+        "-cd",
+        "%WORKSPACE_FOLDER%/src/thesis.tex"
+      ],
+      "env": {}
+    },
+    {
+      "name": "latex_current_make",
       "command": "latexmk",
       "args": [
         "-synctex=1",
         "-interaction=nonstopmode",
         "-file-line-error",
         "-pdf",
-        "-bibtex",
-        "-outdir=..\\build",
+        "-outdir=%OUTDIR%",
         "-cd",
-        "%DIR_W32%\\thesis.tex"
+        "%DOC%"
       ],
       "env": {}
     },
-    {
-      "name": "latex_itb_del",
-      "command": "del",
-      "args": ["/Q", "%DIR_W32%\\..\\output\\thesis.pdf"]
-    },
-    {
-      "name": "latex_itb_move",
-      "command": "copy",
-      "args": ["%OUTDIR_W32%\\thesis.pdf", "%DIR_W32%\\..\\output\\thesis.pdf"]
-    }
   ],
   "latex-workshop.synctex.afterBuild.enabled": true,
-  "latex-workshop.latex.outDir": "%DIR_W32%\\..\\build",
+  "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/build",
   "latex-workshop.latex.autoBuild.run": "onSave",
   "editor.formatOnSave": true
 }

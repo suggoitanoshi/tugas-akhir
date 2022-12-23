@@ -1,0 +1,35 @@
+\documentclass[tikz]{standalone}
+\usepackage{pgfgantt}
+
+\begin{document}
+\ganttset{%
+  calendar week text={%
+      \startday
+    },
+  time slot format=isodate,
+  x unit=2.5pt,
+  y unit title=.7cm,
+  y unit chart=1.2cm,
+  title height=1,
+  bar height=.7,
+  bar label node/.append style={
+      align=left
+    }
+}%
+
+\begin{ganttchart}[
+    vgrid={*6{draw=none}, *1{gray, dashed}}
+  ]{2023-1-16}{2023-4-9}
+  \gantttitlecalendar{year, month=shortname, week=1} \\
+  \ganttbar{Perancangan modifikasi\ganttalignnewline
+    pengoptimasi adam}{2023-1-16}{2023-2-5} \\
+  \ganttbar{Implementasi modifikasi\ganttalignnewline
+    pengoptimasi adam}{2023-2-6}{2023-3-5} \\
+  \ganttbar{Melakukan evaluasi\ganttalignnewline
+    terhadap implementasi}{2023-2-20}{2023-3-19} \\
+  \ganttbar{Menyusun Bab IV\ganttalignnewline
+    Evaluasi}{2023-3-20}{2023-4-2} \\
+  \ganttbar{Menyusun Bab V\ganttalignnewline
+    Penutup}{2023-4-3}{2023-4-9} \\
+\end{ganttchart}
+\end{document}

@@ -1,37 +1,82 @@
 \chapter{Pendahuluan}
 
-Bab Pendahuluan secara umum yang dijadikan landasan kerja dan arah kerja penulis tugas akhir, berfungsi mengantar pembaca untuk membaca laporan tugas akhir secara keseluruhan.
-
 \section{Latar Belakang}
 \label{sec:latarbelakang}
 
-Latar Belakang berisi dasar pemikiran, kebutuhan atau alasan yang menjadi ide dari topik tugas akhir. Tujuan utamanya adalah untuk memberikan informasi secukupnya kepada pembaca agar memahami topik yang akan dibahas.  Saat menuliskan bagian ini, posisikan anda sebagai pembaca – apakah anda tertarik untuk terus membaca?
+Penggunaan teknik pembelajaran mesin pada saat ini banyak digunakan untuk menyelesaikan permasalahan dalam berbagai domain. Salah satu model pembelajaran mesin yang saat ini banyak digunakan adalah \emph{deep learning}. Proses dalam \emph{deep learning} meliputi pemrosesan atas \emph{dataset} yang dimiliki, kemudian membangun sebuah fungsi stokastik yang mampu memprediksi data yang tidak terdapat di \emph{dataset}.
+
+Sebuah model \emph{deep learning} dibagi atas beberapa \emph{layer}, dan setiap \emph{layer} memiliki parameter yang dapat dioptimasi. Algoritma untuk mengoptimasi parameter\+parameter tersebut disebut sebagai \emph{backpropagation}, karena adanya rentetan pembaruan dari \emph{layer} terakhir hingga \emph{layer} pertama secara berurutan. Optimasi dari parameter-parameter tersebut akan menghasilkan fungsi stokastik yang mendekati fungsi sebenarnya dalam memprediksi \emph{dataset}.
+
+Algoritma \emph{backpropagation} menggunakan gradien dari fungsi objektif untuk mengoptimasi parameter\+parameter. Algoritma pengoptimasi \emph{gradient descent} menggunakan hanya gradien untuk mengoptimasi parameter. Akibatnya, pengoptimasi tersebut mudah terjebak pada minimum lokal. Oleh sebab itu, perlu adanya faktor lain untuk membantu pengoptimasi agar tidak terjebak dalam minimum lokal.
+
+Salah satu pengoptimasi yang umum digunakan dalam \emph{backpropagation} adalah Adam. Pengoptimasi Adam menggunakan gradien orde pertama dengan estimasi momen. Estimasi momen yang digunakan dapat membantu Adam untuk mencapai konvergensi lebih cepat, serta menghindari minimum lokal. Pengoptimasi tersebut memiliki kinerja yang baik pada permasalahan yang tidak konveks.
+
+Dalam praktiknya, pembelajaran mesin dapat dilakukan dengan menjalankan perhitungan\+perhitungan yang sudah ditentukan. Namun, karena jumlah perhitungan dalam \emph{deep learning} meningkat dengan bertambahnya parameter, maka dibutuhkan suatu cara untuk mempercepat pembelajaran. Salah satu teknik awal yang dilakukan adalah dengan melakukan paralelisasi perhitungan menggunakan unit pemrosesan grafis atau GPU. Sebuah GPU mampu melakukan komputasi paralel dengan cepat dan efisien, sehingga cocok untuk melakukan perhitungan \emph{deep learning}.
+
+Seiring berkembangnya model\+model \emph{deep learning}, semakin banyak parameter yang dimiliki model. Akibatnya, paralelisasi pada GPU saja tetap membutuhkan waktu yang signifikan untuk melakukan optimasi parameter. Oleh karena itu, paralelisasi kemudian dilakukan pada beberapa mesin dengan GPU terpisah. Dengan melakukan pembelajaran pada beberapa mesin, parameter dapat dioptimasi dengan lebih cepat.
+
+Selain masalah jumlah parameter, ukuran \emph{dataset} yang digunakan juga menjadi faktor dalam pembelajaran. Saat ini, tersedia beragam \emph{dataset} yang memiliki ukuran besar. Sebuah GPU memiliki jumlah memori yang terbatas, sehingga tidak mungkin memuat keseluruhan \emph{dataset}. Oleh karena itu, akan lebih baik apabila jumlah \emph{dataset} dapat dikurangi dengan membaginya ke beberapa mesin.
+
+Paralelisasi perhitungan dalam \emph{deep learning} dapat mempercepat proses pembelajaran yang dilakukan. Oleh karena itu, banyak penelitian yang meninjau optimasi dalam menggunakan sistem terdistribusi. Aspek penting yang ditinjau adalah mengurangi jumlah komunikasi sehingga mesin tidak banyak menunggu. Salah satu bagian yang mempengaruhi jumlah komunikasi antar \emph{worker} adalah pengoptimasi yang digunakan serta aturan pembaruan bobot.
+
+Penelitian dari \textcite{Chen2021CADA} memberikan alternatif pembaruan bobot dalam lingkungan terdistribusi dengan menggunakan kriteria tertentu untuk menentukan \emph{worker} yang harus mengirimkan parameter dan \emph{worker} yang tidak perlu mengirimkan parameter. Aturan pembaruan ini dapat mengurangi jumlah komunikasi yang diperlukan, namun tetap menjamin konvergensi model. Akibatnya, pembelajaran dapat dilakukan dengan lebih efisien.
+
+Penelitian lain dari \textcite{Chen2022Efficient} memberikan alternatif untuk mengurangi beban komunikasi dengan mengurangi data yang dikirimkan. Ukuran data dikurangi dengan cara melakukan kuantisasi. Untuk mengatasi masalah bias, \textcite{Chen2022Efficient} menggunakan \emph{error\+feedback}. Akibatnya, beban komunikasi dapat dikurangi.
 
 \section{Rumusan Masalah}
+Algoritma pengoptimasi Adam dalam lingkungan terdistribusi memiliki banyak modifikasi. Beberapa yang telah disebutkan yakni algoritma dari \textcite{Chen2021CADA} serta \textcite{Chen2022Efficient}. Algoritma dari \textcite{Chen2021CADA} mengoptimasi komunikasi dengan mengurangi jumlah komunikasi. Algoritma dari \textcite{Chen2022Efficient} mengoptimasi komunikasi dengan mengurangi ukuran data yang dikirimkan saat komunikasi.
 
-Rumusan Masalah berisi masalah utama yang dibahas dalam tugas akhir. Rumusan masalah yang baik memiliki struktur sebagai berikut:
+Belum ada modifikasi pengoptimasi Adam yang secara bersamaan mengurangi jumlah komunikasi dan ukuran data yang dikirimkan. Maka, rumusan masalah dari tugas akhir ini ialah:
 
 \begin{enumerate}
-    \item Penjelasan ringkas tentang kondisi/situasi yang ada sekarang terkait dengan topik utama yang dibahas Tugas Akhir.
-    \item Pokok persoalan dari kondisi/situasi yang ada, dapat dilihat dari kelemahan atau kekurangannya. \textbf{Bagian ini merupakan inti dari rumusan masalah}.
-    \item Elaborasi lebih lanjut yang menekankan pentingnya untuk menyelesaikan pokok persoalan tersebut.
-    \item Usulan singkat terkait dengan solusi yang ditawarkan untuk menyelesaikan persoalan.
+    \item Bagaimana cara memodifikasi pengoptimasi Adam pada lingkungan terdistribusi sehingga ukuran data dan jumlah komunikasi dapat dikurangi?
+    \item Bagaimana perbandingan jumlah komunikasi dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2021CADA}?
+    \item Bagaimana perbandingan ukuran data dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2022Efficient}?
 \end{enumerate}
-
-Penting untuk diperhatikan bahwa persoalan yang dideskripsikan pada subbab ini akan dipertanggungjawabkan di bab Evaluasi apakah terselesaikan atau tidak.
 
 \section{Tujuan}
 
-Tuliskan tujuan utama dan/atau tujuan detil yang akan dicapai dalam pelaksanaan tugas akhir. Fokuskan pada hasil akhir yang ingin diperoleh setelah tugas akhir diselesaikan, terkait dengan penyelesaian persoalan pada rumusan masalah. Penting untuk diperhatikan bahwa tujuan yang dideskripsikan pada subbab ini akan dipertanggungjawabkan di akhir pelaksanaan tugas akhir apakah tercapai atau tidak.
+Berdasarkan rumusan masalah yang telah ditulis pada subbab sebelumnya, tujuan dari tugas akhir ini ialah:
+\begin{enumerate}
+    \item Melakukan modifikasi terhadap pengoptimasi Adam pada lingkungan terdistribusi untuk mengurangi ukuran data dan jumlah komunikasi.
+    \item Melakukan analisis komparatif dengan algoritma dari \textcite{Chen2021CADA}.
+    \item Melakukan analisis komparatif dengan algoritma dari \textcite{Chen2022Efficient}.
+\end{enumerate}
 
-\section{Batasan Masalah}
+% \section{Batasan Masalah}
 
-Tuliskan batasan-batasan yang diambil dalam pelaksanaan tugas akhir. Batasan ini dapat dihindari (tidak perlu ada) jika topik/judul tugas akhir dibuat cukup spesifik.
+% Adapun batasan masalah yang ditetapkan untuk tugas akhir ini ialah:
+% \begin{enumerate}
+%     \item Analisis akan dilakukan terhadap simulasi, sehingga tidak dilakukan pada lingkungan terdistribusi yang nyata.
+% \end{enumerate}
 
 \section{Metodologi}
 
-Tuliskan semua tahapan yang akan dilalui selama pelaksanaan tugas akhir. Tahapan ini spesifik untuk menyelesaikan persoalan tugas akhir. Tahapan studi literatur tidak perlu dituliskan karena ini adalah pekerjaan yang harus Anda lakukan selama proses pelaksanaan tugas akhir.
+Metodologi yang digunakan dalam tugas akhir ini ialah:
+\begin{enumerate}
+    \item Mempelajari metode yang digunakan pada penelitian \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient}.
+    \item Pengembangan modifikasi Adam menggunakan teknik yang digunakan pada penelitian \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient}.
+    \item Melakukan implementasi terhadap modifikasi yang dibuat.
+    \item Melakukan pengujian terhadap implementasi.
+\end{enumerate}
 
 \section{Jadwal Pelaksanaan Tugas Akhir}
 
-Tuliskan rencana kegiatan dan jadwal (dirinci sampai per minggu) mulai dari awal pelaksanaan Tugas Akhir I s.d. sidang tugas akhir berikut milestones dan deliverables yang harus diberikan. Jadwal ini dapat dibantu dengan membuat sebuah tabel timeline.
+Rencana jadwal pelaksanaan tugas akhir dapat dilihat pada gambar~\ref{jadwalTA1} dan gambar~\ref{jadwalTA2}.
+
+
+\begin{figure}[H]
+    \includestandalone[width=\textwidth]{figures/gantt-1}
+    \caption{
+        \label{jadwalTA1}
+        Jadwal pelaksanaan Tugas Akhir 1
+    }
+\end{figure}
+
+\begin{figure}[H]
+    \includestandalone[width=\textwidth]{figures/gantt-2}
+    \caption{
+        \label{jadwalTA2}
+        Jadwal pelaksanaan Tugas Akhir 1
+    }
+\end{figure}
