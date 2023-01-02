@@ -1,0 +1,50 @@
+\ProvidesPackage{beamerthemeventi}
+
+\usetheme{default}
+\useinnertheme{rounded}
+\useoutertheme{sidebar}
+
+\definecolor{venti@darkgreen} {rgb} {0.141,0.341,0.294}
+\definecolor{venti@lightgreen} {rgb} {0.243,0.624,0.522}
+\definecolor{venti@brown} {rgb} {0.294,0.208,0.133}
+\definecolor{venti@palewhite} {rgb} {0.910,0.863,0.749}
+\definecolor{venti@blue} {rgb} {0.231,0.243,0.525}
+\definecolor{venti@white} {rgb} {1,1,1}
+
+\setbeamercolor{normal text}{bg=venti@lightgreen, fg=black}
+\setbeamercolor{titlelike}{bg=venti@lightgreen, fg=venti@palewhite}
+\setbeamercolor{background canvas}{bg=white}
+
+\setbeamercolor{palette primary} {bg=venti@lightgreen, fg=venti@white}
+\setbeamercolor{palette secondary} {bg=venti@brown, fg=venti@palewhite}
+\setbeamercolor{palette tertiary} {bg=venti@palewhite, fg=venti@brown}
+\setbeamercolor{palette quaternary} {bg=venti@palewhite, fg=venti@blue}
+
+\setbeamercolor{sidebar}{bg=venti@lightgreen, fg=venti@palewhite}
+
+\setbeamercolor{palette sidebar primary} {bg=venti@palewhite, fg=venti@darkgreen}
+\setbeamercolor{palette sidebar secondary} {bg=venti@darkgreen, fg=venti@brown}
+
+\setbeamercolor{section in sidebar} {bg=venti@palewhite, fg=venti@brown}
+\setbeamercolor{subsection in sidebar} {parent=section in sidebar}
+\setbeamercolor{section in sidebar shaded} {fg=venti@darkgreen}
+\setbeamercolor{subsection in sidebar shaded} {fg=venti@palewhite}
+
+\setbeamercolor{title in sidebar}{fg=venti@white}
+
+\setbeamercolor{item}{fg=venti@brown, bg=venti@palewhite}
+\setbeamercolor{section in toc}{fg=venti@darkgreen}
+
+\setbeamertemplate{itemize item}{$\triangleright$}
+\setbeamertemplate{enumerate item}{$\triangleright$}
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}

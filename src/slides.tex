@@ -1,0 +1,132 @@
+\documentclass[aspectratio=169]{beamer}
+\usefonttheme[onlymath]{serif}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[style=apa]{biblatex}
+\usepackage{mathtools}
+\renewcommand*{\nameyeardelim}{\addcomma\addspace}
+\addbibresource{references.bib}
+
+\title[Modifikasi Adam]{Pengembangan dan Implementasi Modifikasi Pengoptimasi Adam pada Lingkungan Terdistribusi}
+\author[]{
+  Fransiskus Febryan Suryawan\\
+  13519124
+}
+\institute{Institut Teknologi Bandung}
+\date{}
+
+\usetheme{venti}
+
+\begin{document}
+
+{
+\makeatletter
+\setlength{\hoffset}{-.5\beamer@sidebarwidth}
+\makeatother
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+}
+
+\section*{Outline}
+\begin{frame}{Outline}
+  \begin{center}
+    \tableofcontents
+  \end{center}
+\end{frame}
+
+\section{Pendahuluan}
+\subsection{Latar Belakang}
+\begin{frame}{Deep Learning}
+  \begin{itemize}
+    \item Deep Learning banyak digunakan dalam banyak domain
+    \item Sebuah model Deep Learning memiliki parameter yang dapat dipelajari
+    \item Pembelajaran pada Deep Learning banyak menggunakan \textit{backpropagation} untuk pembelajaran
+    \item Pengoptimasi untuk pembelajaran: SGD, \textbf{Adam}, RMSProp, ...
+    \item Arah perkembangan model Deep Learning umumnya adalah memperbanyak parameter untuk mendapat hasil yang lebih baik
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Distributed Deep Learning}
+  \begin{itemize}
+    \item Beberapa mesin dapat digunakan secara bersamaan untuk mempercepat pembelajaran model Deep Learning
+    \item \textit{Bottleneck}: adanya \textit{straggler}, \textit{bandwidth}, ...
+    \item Terdapat banyak penelitian untuk mengurangi efek dari \textit{straggler}
+    \item Terdapat usaha untuk mengurangi kebutuhan \textit{bandwidth} untuk bertukar parameter selama pembelajaran
+          \begin{itemize}
+            \item Kompresi: \textit{lossless}, \textit{lossy}
+            \item Pengurangan komunikasi
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Pengoptimasi Adam}
+  \begin{enumerate}
+    \item Pengoptimasi digunakan untuk mempelajari parameter pada model
+    \item Adam \parencite{ADAMKingma} menggunakan \textit{learning rate} adaptif untuk setiap parameter
+    \item Adam menggunakan estimasi momen orde pertama dan kedua untuk membantu pembelajaran
+    \item Terdapat modifikasi Adam untuk pembelajaran model Deep Learning Terdistribusi
+          \begin{itemize}
+            \item CADA: Communication Adaptive Distributed Adam - pengurangan komunikasi \parencite{Chen2021CADA}
+            \item Efficient-Adam: kompresi bobot menggunakan kuantisasi \parencite{Chen2022Efficient}
+          \end{itemize}
+    \item Belum ada modifikasi Adam yang mengurangi komunikasi serta melakukan kuantisasi secara bersamaan
+  \end{enumerate}
+\end{frame}
+
+\subsection{Rumusan Masalah}
+\begin{frame}{Tujuan}
+  \begin{itemize}
+    \item Menggabungkan teknik pada CADA dengan Efficient-Adam
+    \item Membandingkan hasil modifikasi yang telah dibuat dengan CADA
+    \item Membandingkan hasil modifikasi yang dibuat dengan Efficient-Adam
+  \end{itemize}
+\end{frame}
+
+\section{Penelitian Terkait}
+\subsection{CADA}
+\begin{frame}{CADA}
+  \begin{itemize}
+    \item Terdapat teknik \textit{Lazily Aggregated Gradient} \parencite{Chen2018LAG}
+          \begin{itemize}
+            \item Keefektifannya berkurang seiring berjalannya pembelajaran
+          \end{itemize}
+    \item Pengurangan komunikasi berdasarkan kriteria tertentu
+    \item Memilih \textit{worker} yang akan memperbarui parameter
+          \begin{itemize}
+            \item CADA 1: Membandingkan perkembangan gradien sejak \textit{update} terakhir
+                  \begin{equation*}
+                    \| \delta_m^k - \tilde{\delta}_m^{k-\tau_m^k} \| \le \frac{c}{d_{\mathrm{max}}}\sum_{d=1}^{d_{\mathrm{max}}}\| \theta^{k+1-d} - \theta^{k-d} \|^2
+                  \end{equation*}
+            \item CADA 2: Membandingkan gradien hasil pembaruan parameter sejak \textit{update} terakhir
+                  \begin{equation*}
+                    \| \nabla \ell (\theta^k; \xi_m^k) - \nabla \ell (\theta_m^{k-\tau_m^k}; \xi_m^k) \|^2 \le \frac{c}{d_{\mathrm{max}}} \sum_{d=1}^{d_{\mathrm{max}}} \| \theta^{k+1-d} - \theta^{k-d} \|^2
+                  \end{equation*}
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Efficient-Adam}
+\begin{frame}{Efficient-Adam}
+  \begin{itemize}
+    \item Kuantisasi untuk mengurangi ukuran parameter serta gradien
+          \begin{itemize}
+            \item Mengakibatkan presisi turun, mungkin terjadi bias
+          \end{itemize}
+    \item Error-feedback digunakan untuk mengurangi efek bias
+  \end{itemize}
+\end{frame}
+
+\section{Rancangan Solusi}
+\begin{frame}{Rancangan Solusi}
+  \begin{itemize}
+    \item Menggunakan pustaka \texttt{TensorFlow} untuk abstraksi model Parameter Server serta pembangunan model Deep Learning
+    \item Mendesain modifikasi Adam yang menggabungkan CADA dan Efficient-Adam
+          \begin{itemize}
+            \item Harapan: Mengurangi kebutuhan \textit{bandwidth} lebih jauh
+          \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\end{document}
