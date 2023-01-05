@@ -2,6 +2,7 @@
 \usefonttheme[onlymath]{serif}
 
 \usepackage[utf8]{inputenc}
+\usepackage[mode=buildnew]{standalone}
 
 \usepackage[style=apa]{biblatex}
 \usepackage{mathtools}
@@ -23,6 +24,7 @@
 {
 \makeatletter
 \setlength{\hoffset}{-.5\beamer@sidebarwidth}
+\setlength{\voffset}{-.2em}
 \makeatother
 \begin{frame}[plain]
   \titlepage
@@ -39,6 +41,9 @@
 \section{Pendahuluan}
 \subsection{Latar Belakang}
 \begin{frame}{Deep Learning}
+  \begin{center}
+    \includestandalone[height=6em]{figures/dnn}
+  \end{center}
   \begin{itemize}
     \item Deep Learning banyak digunakan dalam banyak domain
     \item Sebuah model Deep Learning memiliki parameter yang dapat dipelajari
@@ -62,12 +67,11 @@
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{Distributed Deep Learning}
+\begin{frame}{Deep Learning Terdistribusi}
   \begin{itemize}
     \item Model umum yang digunakan dalam distributed Deep Learning: \textbf{Parameter Server}
     \item Beberapa mesin dapat digunakan secara bersamaan untuk mempercepat pembelajaran model Deep Learning
-    \item \textit{Bottleneck}: adanya \textit{straggler}, \textit{bandwidth}, ...
-    \item Terdapat banyak penelitian untuk mengurangi efek dari \textit{straggler}
+    \item \textit{Bottleneck}: batasan \textit{bandwidth}
     \item Terdapat usaha untuk mengurangi kebutuhan \textit{bandwidth} untuk bertukar parameter selama pembelajaran
           \begin{itemize}
             \item Kompresi: \textit{lossless}, \textit{lossy}
@@ -87,7 +91,7 @@
 
 \section{Penelitian Terkait}
 \subsection{CADA}
-\begin{frame}{CADA}
+\begin{frame}{CADA \parencite{Chen2021CADA}}
   \begin{itemize}
     \item Terdapat teknik \textit{Lazily Aggregated Gradient} \parencite{Chen2018LAG}
           \begin{itemize}
@@ -96,11 +100,11 @@
     \item Pengurangan komunikasi berdasarkan kriteria tertentu
     \item Memilih \textit{worker} yang akan memperbarui parameter
           \begin{itemize}
-            \item CADA 1: Membandingkan perkembangan gradien sejak \textit{update} terakhir
+            \item CADA 1
                   \begin{equation*}
-                    \| \delta_m^k - \tilde{\delta}_m^{k-\tau_m^k} \| \le \frac{c}{d_{\mathrm{max}}}\sum_{d=1}^{d_{\mathrm{max}}}\| \theta^{k+1-d} - \theta^{k-d} \|^2
+                    \| \delta_m^k - \tilde{\delta}_m^{k-\tau_m^k} \|^2 \le \frac{c}{d_{\mathrm{max}}}\sum_{d=1}^{d_{\mathrm{max}}}\| \theta^{k+1-d} - \theta^{k-d} \|^2
                   \end{equation*}
-            \item CADA 2: Membandingkan gradien hasil pembaruan parameter sejak \textit{update} terakhir
+            \item CADA 2
                   \begin{equation*}
                     \| \nabla \ell (\theta^k; \xi_m^k) - \nabla \ell (\theta_m^{k-\tau_m^k}; \xi_m^k) \|^2 \le \frac{c}{d_{\mathrm{max}}} \sum_{d=1}^{d_{\mathrm{max}}} \| \theta^{k+1-d} - \theta^{k-d} \|^2
                   \end{equation*}
@@ -109,7 +113,7 @@
 \end{frame}
 
 \subsection{Efficient-Adam}
-\begin{frame}{Efficient-Adam}
+\begin{frame}{Efficient-Adam \parencite{Chen2022Efficient}}
   \begin{itemize}
     \item Kuantisasi untuk mengurangi ukuran parameter serta gradien
           \begin{itemize}
@@ -122,11 +126,16 @@
 \section{Rancangan Solusi}
 \begin{frame}{Rancangan Solusi}
   \begin{itemize}
-  \item Mendesain modifikasi Adam yang menggabungkan CADA dan Efficient-Adam
+    \item Mendesain modifikasi Adam yang menggabungkan CADA \parencite{Chen2021CADA} dan Efficient-Adam \parencite{Chen2022Efficient}
           \begin{itemize}
             \item Harapan: Mengurangi kebutuhan \textit{bandwidth} lebih jauh
           \end{itemize}
     \item Menggunakan pustaka \texttt{TensorFlow} untuk abstraksi model Parameter Server serta pembangunan model Deep Learning
+          \begin{itemize}
+            \item Model yang akan digunakan untuk evaluasi: ResNet18
+            \item Dataset yang akan digunakan: CIFAR100
+          \end{itemize}
+    \item Jumlah komunikasi serta ukuran gradien akan dibandingkan antar teknik
   \end{itemize}
 \end{frame}
 
