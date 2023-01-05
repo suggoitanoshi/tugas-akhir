@@ -48,19 +48,6 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Distributed Deep Learning}
-  \begin{itemize}
-    \item Beberapa mesin dapat digunakan secara bersamaan untuk mempercepat pembelajaran model Deep Learning
-    \item \textit{Bottleneck}: adanya \textit{straggler}, \textit{bandwidth}, ...
-    \item Terdapat banyak penelitian untuk mengurangi efek dari \textit{straggler}
-    \item Terdapat usaha untuk mengurangi kebutuhan \textit{bandwidth} untuk bertukar parameter selama pembelajaran
-          \begin{itemize}
-            \item Kompresi: \textit{lossless}, \textit{lossy}
-            \item Pengurangan komunikasi
-          \end{itemize}
-  \end{itemize}
-\end{frame}
-
 \begin{frame}{Pengoptimasi Adam}
   \begin{enumerate}
     \item Pengoptimasi digunakan untuk mempelajari parameter pada model
@@ -73,6 +60,20 @@
           \end{itemize}
     \item Belum ada modifikasi Adam yang mengurangi komunikasi serta melakukan kuantisasi secara bersamaan
   \end{enumerate}
+\end{frame}
+
+\begin{frame}{Distributed Deep Learning}
+  \begin{itemize}
+    \item Model umum yang digunakan dalam distributed Deep Learning: \textbf{Parameter Server}
+    \item Beberapa mesin dapat digunakan secara bersamaan untuk mempercepat pembelajaran model Deep Learning
+    \item \textit{Bottleneck}: adanya \textit{straggler}, \textit{bandwidth}, ...
+    \item Terdapat banyak penelitian untuk mengurangi efek dari \textit{straggler}
+    \item Terdapat usaha untuk mengurangi kebutuhan \textit{bandwidth} untuk bertukar parameter selama pembelajaran
+          \begin{itemize}
+            \item Kompresi: \textit{lossless}, \textit{lossy}
+            \item Pengurangan komunikasi
+          \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \subsection{Rumusan Masalah}
@@ -121,11 +122,11 @@
 \section{Rancangan Solusi}
 \begin{frame}{Rancangan Solusi}
   \begin{itemize}
-    \item Menggunakan pustaka \texttt{TensorFlow} untuk abstraksi model Parameter Server serta pembangunan model Deep Learning
-    \item Mendesain modifikasi Adam yang menggabungkan CADA dan Efficient-Adam
+  \item Mendesain modifikasi Adam yang menggabungkan CADA dan Efficient-Adam
           \begin{itemize}
             \item Harapan: Mengurangi kebutuhan \textit{bandwidth} lebih jauh
           \end{itemize}
+    \item Menggunakan pustaka \texttt{TensorFlow} untuk abstraksi model Parameter Server serta pembangunan model Deep Learning
   \end{itemize}
 \end{frame}
 
