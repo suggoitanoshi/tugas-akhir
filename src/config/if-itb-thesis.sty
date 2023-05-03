@@ -47,6 +47,7 @@
 \usepackage{algorithm}
 \usepackage{pgfgantt}
 \usepackage[mode=buildnew]{standalone}
+\usepackage{multirow}
 
 
 \input{config/hypenation-id.sty}
@@ -83,37 +84,37 @@
   \addtocontents{atoc}{\protect\value{tocdepth}=\savedtocdepth}%
 
   \titlecontents{chapter}
-    [0pt]
-    {\bfseries}
-    {Lampiran \thecontentslabel.\quad}
-    {}
-    {\textmd{\dotfill}\contentspage}
+  [0pt]
+  {\bfseries}
+  {Lampiran \thecontentslabel.\quad}
+  {}
+  {\textmd{\dotfill}\contentspage}
 
   \titleformat{\chapter}[block]
-    {\bfseries}
-    {\chaptertitlename\ \thechapter.\quad}{0pt}
-    {\bfseries}
+  {\bfseries}
+  {\chaptertitlename\ \thechapter.\quad}{0pt}
+  {\bfseries}
 }
 
 % Setel title pada chapter-chapter di toc, lof, lot
 \titlecontents{chapter}
-  [0pt]
-  {\bfseries}
-  {\MakeUppercase{Bab} \thecontentslabel\quad\uppercase}
-  {}
-  {\textmd{\dotfill}\contentspage}
+[0pt]
+{\bfseries}
+{\MakeUppercase{Bab} \thecontentslabel\quad\uppercase}
+{}
+{\textmd{\dotfill}\contentspage}
 \titlecontents{figure}
-  [0pt]
-  {}
-  {Gambar \thecontentslabel.\quad \enspace}
-  {}
-  {\dotfill\contentspage}
+[0pt]
+{}
+{Gambar \thecontentslabel.\quad \enspace}
+{}
+{\dotfill\contentspage}
 \titlecontents{table}
-  [0pt]
-  {}
-  {Tabel \thecontentslabel.\quad \enspace}
-  {}
-  {\dotfill\contentspage}
+[0pt]
+{}
+{Tabel \thecontentslabel.\quad \enspace}
+{}
+{\dotfill\contentspage}
 
 % Masukin Daftar Pustaka ke toc
 \let\originalprintbibliography\printbibliography
@@ -130,9 +131,9 @@
 % Setting judul
 \chapterfont{\centering \Large}
 \titleformat{\chapter}[display]
-  {\Large\centering\bfseries}
-  {\chaptertitlename\ \thechapter}{0pt}
-    {\Large\bfseries\uppercase}
+{\Large\centering\bfseries}
+{\chaptertitlename\ \thechapter}{0pt}
+{\Large\bfseries\uppercase}
 
 % Setting nomor pada subbsubsubbab
 \setcounter{secnumdepth}{3}

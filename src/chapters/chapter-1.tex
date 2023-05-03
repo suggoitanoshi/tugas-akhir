@@ -19,9 +19,9 @@ Selain masalah jumlah parameter, ukuran \emph{dataset} yang digunakan juga menja
 
 Paralelisasi perhitungan dalam \emph{deep learning} dapat mempercepat proses pembelajaran yang dilakukan. Oleh karena itu, banyak penelitian yang meninjau optimasi dalam menggunakan sistem terdistribusi. Aspek penting yang ditinjau adalah mengurangi jumlah komunikasi sehingga mesin tidak banyak menunggu. Salah satu bagian yang mempengaruhi jumlah komunikasi antar \emph{worker} adalah pengoptimasi yang digunakan serta aturan pembaruan bobot.
 
-Penelitian dari \textcite{Chen2021CADA} memberikan alternatif pembaruan bobot dalam lingkungan terdistribusi dengan menggunakan kriteria tertentu untuk menentukan \emph{worker} yang harus mengirimkan parameter dan \emph{worker} yang tidak perlu mengirimkan parameter. Aturan pembaruan ini dapat mengurangi jumlah komunikasi yang diperlukan, namun tetap menjamin konvergensi model. Akibatnya, pembelajaran dapat dilakukan dengan lebih efisien.
+Penelitian dari \textcite{Chen2021CADA} memberikan alternatif pembaruan bobot dalam lingkungan terdistribusi dengan menggunakan kriteria tertentu untuk menentukan \emph{worker} yang harus mengirimkan parameter dan \emph{worker} yang tidak perlu mengirimkan parameter. Aturan pembaruan ini dapat mengurangi jumlah komunikasi yang diperlukan, namun tetap menjamin konvergensi model. Akibatnya, pembelajaran dapat dilakukan dengan lebih efisien. Teknik ini diberi tajuk CADA, "Communication-Adaptive Distributed Adam."
 
-Penelitian lain dari \textcite{Chen2022Efficient} memberikan alternatif untuk mengurangi beban komunikasi dengan mengurangi data yang dikirimkan. Ukuran data dikurangi dengan cara melakukan kuantisasi. Untuk mengatasi masalah bias, \textcite{Chen2022Efficient} menggunakan \emph{error\+feedback}. Akibatnya, beban komunikasi dapat dikurangi.
+Penelitian lain dari \textcite{Chen2022Efficient} memberikan alternatif untuk mengurangi beban komunikasi dengan mengurangi data yang dikirimkan. Ukuran data dikurangi dengan cara melakukan kuantisasi. Untuk mengatasi masalah bias, \textcite{Chen2022Efficient} menggunakan \emph{error\+feedback}. Akibatnya, beban komunikasi dapat dikurangi. Teknik ini diberi tajuk Efficient-Adam.
 
 \section{Rumusan Masalah}
 Algoritma pengoptimasi Adam dalam lingkungan terdistribusi memiliki banyak modifikasi. Beberapa yang telah disebutkan yakni algoritma dari \textcite{Chen2021CADA} serta \textcite{Chen2022Efficient}. Algoritma dari \textcite{Chen2021CADA} mengoptimasi komunikasi dengan mengurangi jumlah komunikasi. Algoritma dari \textcite{Chen2022Efficient} mengoptimasi komunikasi dengan mengurangi ukuran data yang dikirimkan saat komunikasi.
@@ -30,8 +30,8 @@ Belum ada modifikasi pengoptimasi Adam yang secara bersamaan mengurangi jumlah k
 
 \begin{enumerate}
     \item Bagaimana cara memodifikasi pengoptimasi Adam pada lingkungan terdistribusi sehingga ukuran data dan jumlah komunikasi dapat dikurangi?
-    \item Bagaimana perbandingan jumlah komunikasi dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2021CADA}?
-    \item Bagaimana perbandingan ukuran data dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2022Efficient}?
+    \item Bagaimana perbandingan jumlah komunikasi dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2021CADA}, yakni CADA?
+    \item Bagaimana perbandingan ukuran data dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2022Efficient}, yakni EfficientAdam?
 \end{enumerate}
 
 \section{Tujuan}
@@ -53,23 +53,26 @@ Metodologi yang digunakan dalam tugas akhir ini ialah:
     \item Melakukan pengujian terhadap implementasi.
 \end{enumerate}
 
-\section{Jadwal Pelaksanaan Tugas Akhir}
+% \section{Jadwal Pelaksanaan Tugas Akhir}
 
-Rencana jadwal pelaksanaan tugas akhir dapat dilihat pada gambar~\ref{jadwalTA1} dan gambar~\ref{jadwalTA2}.
+% Rencana jadwal pelaksanaan tugas akhir dapat dilihat pada gambar~\ref{jadwalTA1} dan gambar~\ref{jadwalTA2}.
 
 
-\begin{figure}[H]
-    \includestandalone[width=\textwidth]{figures/gantt-1}
-    \caption{
-        \label{jadwalTA1}
-        Jadwal pelaksanaan Tugas Akhir 1
-    }
-\end{figure}
+% \begin{figure}[H]
+%     \includestandalone[width=\textwidth]{figures/gantt-1}
+%     \caption{
+%         \label{jadwalTA1}
+%         Jadwal pelaksanaan Tugas Akhir 1
+%     }
+% \end{figure}
 
-\begin{figure}[H]
-    \includestandalone[width=\textwidth]{figures/gantt-2}
-    \caption{
-        \label{jadwalTA2}
-        Jadwal pelaksanaan Tugas Akhir 1
-    }
-\end{figure}
+% \begin{figure}[H]
+%     \includestandalone[width=\textwidth]{figures/gantt-2}
+%     \caption{
+%         \label{jadwalTA2}
+%         Jadwal pelaksanaan Tugas Akhir 1
+%     }
+% \end{figure}
+
+\section{Sistematika Penulisan}
+\blindtext
