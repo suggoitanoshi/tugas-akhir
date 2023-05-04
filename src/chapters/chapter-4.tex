@@ -3,18 +3,19 @@
 Pada bab ini, akan dibahas implementasi dari modifikasi pengoptimasi yang sebelumnya telah dibahas, serta perbandingannya dengan penelitian dari \textcite{Chen2022Efficient} dan \textcite{Chen2021CADA}.
 
 \section{Implementasi}
-Algoritma pengoptimasi yang dijelaskan dalam penelitian \textcite{Chen2022Efficient} dan \textcite{Chen2021CADA} akan diimplementasikan menggunakan pustaka PyTorch dengan arsitektur \emph{parameter server}. Kemudian, implementasi modifikasi penggabungan akan didasarkan kepada hasil implementasi kedua pengoptimasi.
+Algoritma pengoptimasi yang dijelaskan dalam penelitian \textcite{Chen2022Efficient} dan \textcite{Chen2021CADA} masing-masing akan diimplementasikan menggunakan pustaka PyTorch dengan arsitektur \emph{parameter server}. Kemudian, implementasi modifikasi penggabungan akan didasarkan kepada hasil implementasi kedua pengoptimasi.
 
 Setiap pengoptimasi akan dibagi menjadi tiga bagian, yakni \emph{parameter server}, \emph{trainer}, dan \emph{runner}. Bagian \emph{parameter server} memiliki tugas umum menjadi \emph{node} yang menyimpan model utama. Kemudian, \emph{trainer} akan mendapatkan parameter model dari \emph{parameter server} dan melakukan perhitungan gradien. Gradien yang telah dihitung lalu dikirim kembali kepada \emph{parameter server} untuk memperbarui parameter model. Bagian yang akan mengorkestrasi hubungan ini adalah \emph{runner}.
 
 Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \textit{parameter server} serta bagian \textit{worker}. Algoritma untuk \textit{parameter server} dapat dilihat pada algoritma~\ref{myadam_server}. Algoritma untuk \textit{worker} dapat dilihat pada algoritma~\ref{myadam_worker}. Kondisi yang digunakan untuk menentukan pengiriman dari tiap \textit{worker} dapat dilihat pada persamaan~\ref{cada2cond}.
 
-\begin{equation}[ht]
+\begin{equation}
   \label{cada2cond}
   \|\nabla f_t(\theta_t) - \nabla f_t(\theta_{t-\tau})\|^2 \leq \frac{c}{D} \sum_{d=1}^{D} \|\theta_{t+1-d} - \theta_{t-d}\|^2
 \end{equation}
 
 \begin{algorithm}[ht]
+  \setstretch{1}
   \caption{Modifikasi Adam untuk Parameter Server}\label{myadam_server}
   \begin{algorithmic}[1]
     \State \textbf{Parameter:} Fungsi Kuantisasi $\mathcal{Q}_s$
@@ -31,6 +32,7 @@ Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \texti
 
 \begin{algorithm}[ht]
   \caption{Modifikasi Adam untuk Worker ke-$i$}\label{myadam_worker}
+  \setstretch{1}
   \begin{algorithmic}[1]
     \State \textbf{Parameter:} Fungsi Kuantisasi $\mathcal{Q}_w$, Hyperparameter Adam $\alpha, \beta_1, \beta_2$, konstanta batas $c$, batas maksimum penundaan $D$
     \State $m_0^{(i)} \gets 0, v_0^{(i)} \gets \epsilon, e_1^{(i)} \gets 0, \tau^{(i)} \gets 0$
@@ -64,6 +66,7 @@ Pengujian dilakuan pada server DGX dengan spesifikasi pada tabel~\ref{dgx}. Namu
 \begin{table}[ht]
   \caption{Spesifikasi Lingkungan Pengujian}\label{dgx}
   \centering
+  \setstretch{1.5}
   \begin{tabular}[ht]{ | c | c | }
     \hline
     \textbf{Parameter} & \textbf{Spesifikasi}                           \\
@@ -83,6 +86,7 @@ Selain itu, versi perangkat lunak dan pustaka dapat dilihat pada tabel~\ref{soft
 \begin{table}[ht]
   \caption{Versi Perangkat Lunak}\label{softwares}
   \centering
+  \setstretch{1.5}
   \begin{tabular}{ | c | c | }
     \hline
     \textbf{Perangkat Lunak} & \textbf{Versi} \\
@@ -104,6 +108,7 @@ Pemilihan \emph{hyperparameter} untuk masing-masing teknik dapat dilihat pada ta
 \begin{table}[ht]
   \caption{Pemilihan \emph{Hyperparameter}}\label{hyperparam}
   \centering
+  \setstretch{1.5}
   \begin{tabular}{ | c | c | c | }
     \hline
     \textbf{Teknik}                                               & \textbf{Parameter} & \textbf{Nilai} \\
@@ -134,13 +139,14 @@ Pengujian dilakukan dengan merekam jumlah byte yang dipertukarkan serta jumlah k
 \subsection{Hasil Pengujian}
 
 Hasil yang akan dibandingkan dalam pengujian utamanya adalah jumlah komunikasi serta jumlah byte yang digunakan untuk komunikasi. Namun, akurasi model juga akan dibandingkan untuk memastikan setiap teknik mampu menghasilkan model dengan kemampuan yang mirip. Plot akurasi tiap epoch untuk ketiga teknik dapat dilihat pada gambar~\ref{acc}. Dalam plot tersebut dapat dilihat akurasi model yang dihasilkan ketiga teknik berada di atas 80\%, dengan Efficient-Adam dari \textcite{Chen2022Efficient} terletak sedikit lebih di atas kedua teknik lainnya.
+
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{acc.png}
   \caption{Akurasi tiap teknik}\label{acc}
 \end{figure}
 
-Plot perbandingan jumlah komunikasi untuk tiap teknik dapat dilihat pada gambar~\ref{comms}. Dalam plot tersebut, terlihat bahwa teknik Efficient-Adam sangat berimpitan dengan CADA, namun di beberapa epoch CADA sedikit mengurangi jumlah komunikasi. Di sisi lain, implementasi gabungan memberikan pengurangan jumlah komunikasi yang cukup banyak, hingga hanya membutuhkan kurang dari 825 komunikasi di sebelum epoch 600.
+Plot perbandingan jumlah komunikasi untuk tiap teknik dapat dilihat pada gambar~\ref{comms}. Dalam plot tersebut, terlihat bahwa teknik Efficient-Adam sangat berimpitan dengan CADA. Namun, teknik CADA mampu mengurangi jumlah komunikasi dalam skala kecil, masih tetap di atas 975 komunikasi. Di sisi lain, implementasi gabungan memberikan pengurangan jumlah komunikasi yang cukup banyak, hingga hanya membutuhkan kurang dari 825 komunikasi di sebelum epoch 600.
 
 \begin{figure}[ht]
   \centering
@@ -148,7 +154,8 @@ Plot perbandingan jumlah komunikasi untuk tiap teknik dapat dilihat pada gambar~
   \caption{Jumlah komunikasi tiap teknik}\label{comms}
 \end{figure}
 
-Plot perbandingan jumlah byte yang digunakan dapat dilihat pada gambar~\ref{bits}. Dapat dilihat bahwa jumlah byte yang digunakan oleh CADA sekitar 4 kali lebih besar dibandingkan Efficient-Adam. Namun, terlihat bahwa teknik gabungan menggunakan lebih banyak byte dibandingkan Efficient-Adam saja.
+Plot perbandingan jumlah byte yang digunakan dapat dilihat pada gambar~\ref{bits}. Dapat dilihat bahwa jumlah byte yang digunakan oleh CADA sekitar 4 kali lebih besar dibandingkan Efficient-Adam serta teknik gabungan. Namun, terlihat bahwa teknik gabungan menggunakan lebih banyak byte dibandingkan Efficient-Adam saja. Kemudian, jumlah byte yang digunakan oleh teknik gabungan terlihat berkurang sesuai dengan pengurangan jumlah komunikasi yang terjadi.
+
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.8\textwidth]{bits.png}
@@ -157,4 +164,8 @@ Plot perbandingan jumlah byte yang digunakan dapat dilihat pada gambar~\ref{bits
 
 
 \subsection{Analisis Hasil Pengujian}
-Berdasarkan pengujian yang dilakukan, terdapat beberapa aspek yang perlu dikaji lebih lanjut.
+Berdasarkan pengujian yang dilakukan, didapatkan bahwa teknik gabungan dapat menggunakan jumlah byte lebih sedikit dibandingkan CADA, namun lebih banyak dibandingkan Efficient-Adam. Namun, teknik gabungan tetap membutuhkan sedikit lebih banyak byte untuk melakukan komunikasi dibandingkan Efficient-Adam. Penyebab meningkatnya jumlah byte adalah adanya nilai tambahan yang perlu dikomunikasikan oleh \emph{parameter server}, yakni nilai ambang yang digunakan dalam persamaan~\ref{cada2cond}.
+
+Kemudian, jumlah komunikasi yang dilakukan oleh CADA juga masih tidak berkurang sebanyak jumlah komunikasi dalam teknik gabungan. Hal ini mungkin disebabkan karena \emph{hyperparameter} yang dipilih menyebabkan nilai selisih gradien yang didapatkan selalu besar. Dampaknya, persamaan~\ref{cada2cond} tidak pernah terpenuhi. Namun, pemilihan \emph{hyperparameter} lain, seperti menggunakan $\alpha = 0.0005$ menyebabkan model yang dihasilkan memiliki akurasi lebih rendah.
+
+Hasil gabungan yang didapatkan memiliki akurasi yang memiliki akurasi mirip dengan kedua teknik lain. Selain itu, teknik gabungan juga mampu mengurangi kebutuhan komunikasi sejumlah 13.838 ronde dibandingkan Efficient-Adam. Kemudian, hasil gabungan juga dapat mengurangi jumlah byte yang digunakan dalam komunikasi hingga menjadi sekitar 0.303 kali dari CADA.
