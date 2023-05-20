@@ -49,6 +49,7 @@
 \usepackage{pgfgantt}
 \usepackage[mode=buildnew]{standalone}
 \usepackage{multirow}
+\usepackage{titlesec}
 
 
 \input{config/hypenation-id.sty}
@@ -155,3 +156,13 @@
 
 % Definisi hyphen
 \newcommand{\+}{\hyp}
+
+% Jarak tabel dan gambar dengan teks lainnya minimal 3 spasi
+\setlength{\intextsep}{2\baselineskip}
+\setlength{\textfloatsep}{2\baselineskip}
+\setlength{\floatsep}{2\baselineskip}
+\setlength{\belowcaptionskip}{\baselineskip}
+
+% Judul subbab berukuran sama
+\titleformat*{\subsection}{\large\bfseries}
+\titleformat*{\subsubsection}{\large\bfseries}
