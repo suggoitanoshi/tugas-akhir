@@ -121,10 +121,10 @@
 % Masukin Daftar Pustaka ke toc
 \let\originalprintbibliography\printbibliography
 \renewcommand\printbibliography{%
-  \phantomsection
   \cleardoublepage
-  \originalprintbibliography
+  \phantomsection
   \addcontentsline{toc}{chapter}{\bibname}
+  \originalprintbibliography
 }
 
 % Line satu setengah spasi
