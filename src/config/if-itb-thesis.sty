@@ -59,7 +59,7 @@
 
 % Setting titik di daftar isi
 \makeatletter
-\renewcommand*{\@dotsep}{1.7}
+\renewcommand*{\@dotsep}{1.5}
 \makeatother
 
 % Setting daftar lampiran
@@ -108,13 +108,13 @@
 \titlecontents{figure}
 [0pt]
 {}
-{Gambar \thecontentslabel.\quad \enspace}
+{Gambar \thecontentslabel.\enspace}
 {}
 {\dotfill\contentspage}
 \titlecontents{table}
 [0pt]
 {}
-{Tabel \thecontentslabel.\quad \enspace}
+{Tabel \thecontentslabel.\enspace}
 {}
 {\dotfill\contentspage}
 
@@ -140,13 +140,11 @@
 % Setting nomor pada subbsubsubbab
 \setcounter{secnumdepth}{3}
 
-\makeatletter
-
-\makeatother
-
 % Counter untuk figure dan table.
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
+\counterwithin{equation}{section}
+\counterwithin{algorithm}{section}
 
 % Define blank page
 \newcommand*{\blankpage}{\afterpage{\null\newpage}}
@@ -166,3 +164,9 @@
 % Judul subbab berukuran sama
 \titleformat*{\subsection}{\large\bfseries}
 \titleformat*{\subsubsection}{\large\bfseries}
+
+% autoref prefix
+\def\tableautorefname{Tabel}
+\def\figureautorefname{Gambar}
+\def\algorithmautorefname{Algoritma}
+\def\equationautorefname{Persamaan}

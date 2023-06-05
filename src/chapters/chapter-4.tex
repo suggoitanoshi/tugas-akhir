@@ -7,7 +7,7 @@ Algoritma pengoptimasi yang dijelaskan dalam penelitian \textcite{Chen2022Effici
 
 Setiap pengoptimasi akan dibagi menjadi tiga bagian, yakni \emph{parameter server}, \emph{trainer}, dan \emph{runner}. Bagian \emph{parameter server} memiliki tugas umum menjadi \emph{node} yang menyimpan model utama. Kemudian, \emph{trainer} akan mendapatkan parameter model dari \emph{parameter server} dan melakukan perhitungan gradien. Gradien yang telah dihitung lalu dikirim kembali kepada \emph{parameter server} untuk memperbarui parameter model. Bagian yang akan mengorkestrasi hubungan ini adalah \emph{runner}.
 
-Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \textit{parameter server} serta bagian \textit{worker}. Algoritma untuk \textit{parameter server} dapat dilihat pada algoritma~\ref{myadam_server}. Algoritma untuk \textit{worker} dapat dilihat pada algoritma~\ref{myadam_worker}. Kondisi yang digunakan untuk menentukan pengiriman dari tiap \textit{worker} dapat dilihat pada pertaksamaan~\ref{cada2cond}.
+Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \textit{parameter server} serta bagian \textit{worker}. Algoritma untuk \textit{parameter server} dapat dilihat pada \autoref{myadam_server}. Algoritma untuk \textit{worker} dapat dilihat pada \autoref{myadam_worker}. Kondisi yang digunakan untuk menentukan pengiriman dari tiap \textit{worker} dapat dilihat pada \autoref{cada2cond}.
 
 \begin{equation}
   \label{cada2cond}
@@ -46,7 +46,7 @@ Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \texti
     \State $\theta_t \gets \theta_{t-1} - \delta^{(i)}$
     \State Hitung $\nabla f_t(\theta^{(i)}_{t})$ dan $\nabla f_t(\theta^{(i)}_{t-\tau})$
     \State $\delta^{(i)} \gets \mathcal{Q}_w(\delta^{(i)})$
-    \If{Kondisi \ref{cada2cond} tidak terpenuhi atau $\tau \ge D$}
+    \If{Kondisi \autoref{cada2cond} tidak terpenuhi atau $\tau \ge D$}
     \State Kirim $\delta^{(i)}$
     \State $\tau \gets 1$
     \Else
@@ -61,7 +61,7 @@ Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \texti
 
 \section{Pengujian}
 \subsection{Lingkungan Pengujian}
-Pengujian dilakuan pada server DGX dengan spesifikasi pada tabel~\ref{dgx}. Namun, pengujian dilakukan dengan melakukan simulasi \emph{deep learning} terdistribusi pada hanya satu GPU.
+Pengujian dilakuan pada server DGX dengan spesifikasi pada \autoref{dgx}. Namun, pengujian dilakukan dengan melakukan simulasi \emph{deep learning} terdistribusi pada hanya satu GPU.
 
 \begin{table}[H]
   \caption{Spesifikasi Lingkungan Pengujian}\label{dgx}
@@ -82,7 +82,7 @@ Pengujian dilakuan pada server DGX dengan spesifikasi pada tabel~\ref{dgx}. Namu
   \end{tabular}
 \end{table}
 
-Selain itu, versi perangkat lunak dan pustaka dapat dilihat pada tabel~\ref{softwares}.
+Selain itu, versi perangkat lunak dan pustaka dapat dilihat pada \autoref{softwares}.
 \begin{table}[H]
   \caption{Versi Perangkat Lunak}\label{softwares}
   \centering
@@ -117,15 +117,15 @@ Perhitungan jumlah byte yang digunakan untuk komunikasi dilakukan dengan cara me
 
 Pemilihan \emph{hyperparameter} dilakukan secara terpisah untuk kedua skenario, dan untuk setiap teknik. Namun, \emph{learning rate} akan berkurang seiring bertambahnya epoch. Setiap epoch tertentu, \emph{learning rate} yang digunakan akan berkurang sebanyak setengah \emph{learning rate} saat itu. Untuk kedua skenario, pengurangan dilakukan setiap 100 epoch.
 
-Model yang digunakan untuk mengklasifikasi Fashion-MNIST adalah sebuah model dengan dua buah \emph{layer} konvolusi yang memiliki fungsi aktivasi ELU dan operasi \emph{max pooling}, diikuti oleh sebuah \emph{layer} yang terhubung penuh untuk membuat prediksi. Arsitektur model yang dibangun dapat dilihat pada gambar~\ref{fashionmnist}. Model tersebut memiliki parameter sejumlah 24.778 yang terbagi dalam 7 \emph{layer}.
+Model yang digunakan untuk mengklasifikasi Fashion-MNIST adalah sebuah model dengan dua buah \emph{layer} konvolusi yang memiliki fungsi aktivasi ELU dan operasi \emph{max pooling}, diikuti oleh sebuah \emph{layer} yang terhubung penuh untuk membuat prediksi. Arsitektur model yang dibangun dapat dilihat pada \autoref{fashionmnist}. Model tersebut memiliki parameter sejumlah 24.778 yang terbagi dalam 7 \emph{layer}.
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{fashion_mnist.onnx.png}
-  \caption{Arsitektur model sederhana untuk klasifikasi Fashion-MNIST}\label{fashionmnist}
+  \caption{Arsitektur model untuk klasifikasi Fashion-MNIST}\label{fashionmnist}
 \end{figure}
 
-Pemilihan \emph{hyperparameter} untuk model tersebut dapat dilihat pada tabel~\ref{hyperparamfashion}. Fungsi kuantisasi yang digunakan untuk teknik Efficient-Adam serta teknik gabungan adalah pemetaan langsung ke tipe data \emph{float16} pada PyTorch. Ukuran \emph{minibatch} yang digunakan dalam pembelajaran adalah 60.
+Pemilihan \emph{hyperparameter} untuk model tersebut dapat dilihat pada \autoref{hyperparamfashion}. Fungsi kuantisasi yang digunakan untuk teknik Efficient-Adam serta teknik gabungan adalah pemetaan langsung ke tipe data \emph{float16} pada PyTorch. Ukuran \emph{minibatch} yang digunakan dalam pembelajaran adalah 60.
 
 \begin{table}[H]
   \caption{Pemilihan \emph{Hyperparameter} untuk klasifikasi Fashion-MNIST}\label{hyperparamfashion}
@@ -157,7 +157,7 @@ Pemilihan \emph{hyperparameter} untuk model tersebut dapat dilihat pada tabel~\r
 \end{table}
 
 
-Model yang digunakan untuk mengklasifikasi \emph{dataset} CIFAR-10 adalah ResNet-20. Model ResNet-20, atau secara umum ResNet, merupakan model yang menggunakan pemetaan residu $\mathcal{H}(x) = \mathcal{F}(x) + x$ \parencite{he2015deep}, yang memberikan prekondisi pemetaan identitas untuk model. Menurut eksperimen yang dilakukan \textcite{he2015deep}, pemetaan identitas merupakan prekondisi yang cukup masuk akal. pemetaan residu dapat dibuat sebagai sebuah hubungan langsung dari titik tertentu ke titik lain, melompati beberapa \emph{layer}. Ilustrasi dari sebuah blok residu dapat dilihat pada gambar~\ref{resblock}.
+Model yang digunakan untuk mengklasifikasi \emph{dataset} CIFAR-10 adalah ResNet-20. Model ResNet-20, atau secara umum ResNet, merupakan model yang menggunakan pemetaan residu $\mathcal{H}(x) = \mathcal{F}(x) + x$ \parencite{he2015deep}, yang memberikan prekondisi pemetaan identitas untuk model. Menurut eksperimen yang dilakukan \textcite{he2015deep}, pemetaan identitas merupakan prekondisi yang cukup masuk akal. pemetaan residu dapat dibuat sebagai sebuah hubungan langsung dari titik tertentu ke titik lain, melompati beberapa \emph{layer}. Ilustrasi dari sebuah blok residu dapat dilihat pada \autoref{resblock}.
 
 \begin{figure}[htb]
   \centering
@@ -167,7 +167,7 @@ Model yang digunakan untuk mengklasifikasi \emph{dataset} CIFAR-10 adalah ResNet
 
 Model ResNet-20 yang digunakan dalam pengujian diambil dari \emph{repository} GitHub \cite{Idelbayev18a} dengan beberapa perubahan agar dapat digunakan pada CPU dan GPU. Model tersebut memiliki jumlah parameter sebanyak 0.27 juta dalam 20 \emph{layer}.
 
-Pemilihan \emph{hyperparameter} untuk masing-masing teknik dapat dilihat pada tabel~\ref{hyperparamresnet}. Fungsi kuantisasi yang digunakan sama seperti skenario sebelumnya, yakni menggunakan pemetaan langsung ke tipe data \emph{float16} pada PyTorch.
+Pemilihan \emph{hyperparameter} untuk masing-masing teknik dapat dilihat pada \autoref{hyperparamresnet}. Fungsi kuantisasi yang digunakan sama seperti skenario sebelumnya, yakni menggunakan pemetaan langsung ke tipe data \emph{float16} pada PyTorch.
 
 \begin{table}[H]
   \caption{Pemilihan \emph{Hyperparameter} untuk klasifikasi CIFAR-10}\label{hyperparamresnet}
@@ -204,7 +204,7 @@ Hasil yang akan dibandingkan dalam kedua skenario adalah jumlah komunikasi serta
 
 \subsubsection{\emph{Dataset} Fashion-MNIST}
 
-Plot akurasi tiap epoch untuk ketiga teknik dapat dilihat pada gambar~\ref{fashion_acc}. Dalam plot tersebut dapat dilihat akurasi model yang dihasilkan teknik Efficient-Adam serta teknik gabungan berada di sekitar 84 hingga 86 persen. Dibandingkan kedua teknik tersebt, teknik CADA hanya menghasilkan model yang memiliki akurasi sekitar 70 persen.
+Plot akurasi tiap epoch untuk ketiga teknik dapat dilihat pada \autoref{fashion_acc}. Dalam plot tersebut dapat dilihat akurasi model yang dihasilkan teknik Efficient-Adam serta teknik gabungan berada di sekitar 84 hingga 86 persen. Dibandingkan kedua teknik tersebt, teknik CADA hanya menghasilkan model yang memiliki akurasi sekitar 70 persen.
 
 \begin{figure}[H]
   \centering
@@ -212,26 +212,26 @@ Plot akurasi tiap epoch untuk ketiga teknik dapat dilihat pada gambar~\ref{fashi
   \caption{Akurasi tiap teknik dalam pelatihan pada Fashion-MNIST}\label{fashion_acc}
 \end{figure}
 
-Plot perbandingan jumlah komunikasi per epoch untuk tiap teknik dapat dilihat pada gambar~\ref{fashion_comms}. Teknik CADA menggunakan 1000 komunikasi per epoch, tanpa ada pengurangan sama sekali. Teknik gabungan juga tidak mampu mengurangi jumlah komunikasi sama sekali, dengan jumlah komunikasi yang sama dengan teknik CADA.
+Plot perbandingan jumlah komunikasi per epoch untuk tiap teknik dapat dilihat pada \autoref{fashion_comms}. Teknik CADA menggunakan 1000 komunikasi per epoch, tanpa ada pengurangan sama sekali. Teknik gabungan juga tidak mampu mengurangi jumlah komunikasi sama sekali, dengan jumlah komunikasi yang sama dengan teknik CADA.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{fashion_comms.png}
-  \caption{Jumlah komunikasi tiap teknik dalam pelatihan pada Fashion-MNIST}\label{fashion_comms}
+  \caption{Perbandingan jumlah komunikasi dalam skenario Fashion-MNIST}\label{fashion_comms}
 \end{figure}
 
-Plot perbandingan jumlah byte yang digunakan dapat dilihat pada gambar~\ref{fashion_bits}. Jumlah byte yang paling sedikit digunakan adalah pada teknik Efficient-Adam, yang menggunakan 0.92 kali teknik gabungan. Teknik gabungan menggunakan lebih banyak byte untuk berkomunikasi karena adanya kebutuhan untuk mendistribusikan nilai ambang pada pertaksamaan~\ref{cada2cond}.
+Plot perbandingan jumlah byte yang digunakan dapat dilihat pada \autoref{fashion_bits}. Jumlah byte yang paling sedikit digunakan adalah pada teknik Efficient-Adam, yang menggunakan 0.92 kali teknik gabungan. Teknik gabungan menggunakan lebih banyak byte untuk berkomunikasi karena adanya kebutuhan untuk mendistribusikan nilai ambang pada \autoref{cada2cond}.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{fashion_bits.png}
-  \caption{Jumlah byte tiap teknik dalam pelatihan pada Fashion-MNIST}\label{fashion_bits}
+  \caption{Perbandingan jumlah byte dalam skenario Fashion-MNIST}\label{fashion_bits}
 \end{figure}
 
 
 \subsubsection{\emph{Dataset} CIFAR-10}
 
-Plot akurasi tiap epoch untuk ketiga teknik dapat dilihat pada gambar~\ref{resnet_acc}. Dalam plot tersebut dapat dilihat akurasi model yang dihasilkan ketiga teknik berada di atas 80\%, dengan Efficient-Adam terletak sedikit lebih di atas kedua teknik lainnya.
+Plot akurasi tiap epoch untuk ketiga teknik dapat dilihat pada \autoref{resnet_acc}. Dalam plot tersebut dapat dilihat akurasi model yang dihasilkan ketiga teknik berada di atas 80\%, dengan Efficient-Adam terletak sedikit lebih di atas kedua teknik lainnya.
 
 \begin{figure}[H]
   \centering
@@ -239,35 +239,35 @@ Plot akurasi tiap epoch untuk ketiga teknik dapat dilihat pada gambar~\ref{resne
   \caption{Akurasi tiap teknik dalam pelatihan ResNet-20}\label{resnet_acc}
 \end{figure}
 
-Plot perbandingan jumlah komunikasi per epoch untuk tiap teknik dapat dilihat pada gambar~\ref{resnet_comms}. Dalam plot tersebut, terlihat bahwa teknik Efficient-Adam sangat berimpitan dengan CADA. Namun, teknik CADA mampu mengurangi sedikit jumlah komunikasi. Di sisi lain, implementasi gabungan memberikan pengurangan jumlah komunikasi yang cukup banyak, hingga hanya membutuhkan kurang dari 825 komunikasi di sebelum epoch 600.
+Plot perbandingan jumlah komunikasi per epoch untuk tiap teknik dapat dilihat pada \autoref{resnet_comms}. Dalam plot tersebut, terlihat bahwa teknik Efficient-Adam sangat berimpitan dengan CADA. Namun, teknik CADA mampu mengurangi sedikit jumlah komunikasi. Di sisi lain, implementasi gabungan memberikan pengurangan jumlah komunikasi yang cukup banyak, hingga hanya membutuhkan kurang dari 825 komunikasi di sebelum epoch 600.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{resnet_comms.png}
-  \caption{Jumlah komunikasi tiap teknik dalam pelatihan ResNet-20}\label{resnet_comms}
+  \caption{Perbandingan jumlah komunikasi dalam pelatihan ResNet-20}\label{resnet_comms}
 \end{figure}
 
-Plot perbandingan jumlah byte yang digunakan dapat dilihat pada gambar~\ref{resnet_bits}. Dapat dilihat bahwa jumlah byte yang digunakan oleh CADA sekitar 4 kali lebih besar dibandingkan Efficient-Adam serta teknik gabungan. Namun, terlihat bahwa teknik gabungan menggunakan lebih banyak byte dibandingkan Efficient-Adam. Kemudian, jumlah byte yang digunakan oleh teknik gabungan terlihat berkurang sesuai dengan pengurangan jumlah komunikasi yang terjadi.
+Plot perbandingan jumlah byte yang digunakan dapat dilihat pada \autoref{resnet_bits}. Dapat dilihat bahwa jumlah byte yang digunakan oleh CADA sekitar 4 kali lebih besar dibandingkan Efficient-Adam serta teknik gabungan. Namun, terlihat bahwa teknik gabungan menggunakan lebih banyak byte dibandingkan Efficient-Adam. Kemudian, jumlah byte yang digunakan oleh teknik gabungan terlihat berkurang sesuai dengan pengurangan jumlah komunikasi yang terjadi.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{resnet_bits.png}
-  \caption{Jumlah byte tiap teknik dalam pelatihan ResNet-20}\label{resnet_bits}
+  \caption{Perbandingan jumlah byte dalam pelatihan ResNet-20}\label{resnet_bits}
 \end{figure}
 
 
 \subsection{Analisis Hasil Pengujian}
 
-Berdasarkan pengujian yang dilakukan dalam kedua skenario, didapatkan bahwa teknik gabungan dapat menggunakan jumlah byte lebih sedikit dibandingkan CADA. Bahkan, teknik gabungan mampu mengurangi jumlah komunikasi dalam skenario pelatihan model yang lebih kompleks yakni ResNet-20. Namun, teknik gabungan tetap membutuhkan sedikit lebih banyak byte untuk melakukan komunikasi dibandingkan Efficient-Adam. Penyebab lebih banyaknya jumlah byte adalah adanya nilai tambahan yang perlu dikomunikasikan oleh \emph{parameter server}, yakni nilai ambang yang digunakan dalam pertaksamaan~\ref{cada2cond}.
+Berdasarkan pengujian yang dilakukan dalam kedua skenario, didapatkan bahwa teknik gabungan dapat menggunakan jumlah byte lebih sedikit dibandingkan CADA. Bahkan, teknik gabungan mampu mengurangi jumlah komunikasi dalam skenario pelatihan model yang lebih kompleks yakni ResNet-20. Namun, teknik gabungan tetap membutuhkan sedikit lebih banyak byte untuk melakukan komunikasi dibandingkan Efficient-Adam. Penyebab lebih banyaknya jumlah byte adalah adanya nilai tambahan yang perlu dikomunikasikan oleh \emph{parameter server}, yakni nilai ambang yang digunakan dalam \autoref{cada2cond}.
 
 Pengurangan jumlah komunikasi pada skenario \emph{dataset} CIFAR-10 lebih baik dibandingkan pada skenario \emph{dataset} Fashion-MNIST. Dalam skenario \emph{dataset} CIFAR-10, model ResNet-20 memiliki jumlah parameter yang banyak, sehingga nilai ambang yang dihitung akan lebih besar. Di sisi lain, model sederhana yang digunakan dalam skenario \emph{dataset} Fashion-MNIST memiliki jumlah parameter jauh lebih sedikit, sehingga nilai ambang yang didapatkan lebih kecil. Oleh karena itu, lebih mudah untuk mencapai nilai ambang pada skenario \emph{dataset} Fashion-MNIST.
 
-Kemudian, jumlah komunikasi yang dilakukan oleh CADA juga masih tidak berkurang sebanyak jumlah komunikasi dalam teknik gabungan. Hal ini mungkin disebabkan karena \emph{hyperparameter} yang dipilih menyebabkan nilai selisih gradien yang didapatkan selalu besar. Dampaknya, pertaksamaan~\ref{cada2cond} jarang terpenuhi. Hal tersebut tidak terlihat pada teknik gabungan karena nilai pembaruan dikuantisasi. Hal tersebut menurunkan presisi nilai ambang. Kemudian, perkembangan gradien akan dipengaruhi oleh \emph{error-feedback}, sehingga perkembangan gradien mungkin menjadi lebih kecil.
+Kemudian, jumlah komunikasi yang dilakukan oleh CADA juga masih tidak berkurang sebanyak jumlah komunikasi dalam teknik gabungan. Hal ini mungkin disebabkan karena \emph{hyperparameter} yang dipilih menyebabkan nilai selisih gradien yang didapatkan selalu besar. Dampaknya, \autoref{cada2cond} jarang terpenuhi. Hal tersebut tidak terlihat pada teknik gabungan karena nilai pembaruan dikuantisasi. Hal tersebut menurunkan presisi nilai ambang. Kemudian, perkembangan gradien akan dipengaruhi oleh \emph{error-feedback}, sehingga perkembangan gradien mungkin menjadi lebih kecil.
 
 Pemilihan nilai \emph{hyperparameter} yang berbeda, seperti memilih nilai $\alpha$ yang lebih kecil atau lebih besar menyebabkan model yang dihasilkan memiliki akurasi lebih rendah. Penggunaan nilai $\alpha$ yang terlalu kecil dapat menyebabkan model mencapai minima lokal. Namun, penggunaan nilai $\alpha$ yang terlalu besar juga dapat menghambat proses pelatihan model.
 
 Pemilihan \emph{hyperparameter} $\beta_1$ maupun $\beta_2$ juga dapat memengaruhi kecepatan konvergensi serta akurasi model yang dihasilkan. yang lebih besar dapat membantu dalam pelatihan agar tidak terjebak dalam minima lokal, namun model lebih sulit untuk konvergen karena momentum yang terlalu besar.
 
-Pemilihan nilai $c$ yang digunakan sebagai konstanta dalam pertaksamaan~\ref{cada2cond} memengaruhi jumlah komunikasi yang diperlukan oleh CADA maupun teknik gabungan. Apabila nilai c terlalu besar, maka komunikasi yang dilakukan akan menjadi sedikit sehingga konvergensi model semakin lambat. Namun, apabila nilai c terlalu kecil, maka pengurangan komunikasi akan terjadi lebih jarang.
+Pemilihan nilai $c$ yang digunakan sebagai konstanta dalam \autoref{cada2cond} memengaruhi jumlah komunikasi yang diperlukan oleh CADA maupun teknik gabungan. Apabila nilai c terlalu besar, maka komunikasi yang dilakukan akan menjadi sedikit sehingga konvergensi model semakin lambat. Namun, apabila nilai c terlalu kecil, maka pengurangan komunikasi akan terjadi lebih jarang.
 
 Pemilihan nilai $D$ serta $d_{max}$ sebagai \emph{hyperparameter} juga dapat memengaruhi jumlah komunikasi yang diperlukan. Akibatnya, konvergensi model juga akan terpengaruh. Pemilihan nilai $D$ akan berpengaruh terhadap komunikasi yang dilakukan oleh \emph{worker} tertentu apabila \emph{worker} tersebut tidak memberikan peningkatan gradien yang besar. Selain itu, nilai $d_{max}$ akan memengaruhi nilai ambang yang dihasilkan. Semakin besar nilai $d_{max}$, maka semakin banyak nilai ambang historis yang akan memengaruhi nilai ambang selanjutnya.
