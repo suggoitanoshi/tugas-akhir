@@ -4,10 +4,12 @@
 \begin{enumerate}
   \item Berhasil dibuat suatu teknik yang menggabungkan CADA dengan Efficient-Adam. Pengurangan komunikasi dalam teknik tersebut menggunakan ide dari CADA, sedangkan kompresi gradien menggunakan ide dari Efficient-Adam.
   \item Teknik gabungan mampu mengurangi komunikasi lebih banyak dibandingkan teknik CADA dalam skenario pelatihan model yang lebih kompleks.
-  \item Teknik gabungan menggunakan lebih banyak byte untuk berkomunikasi dibandingkan teknik Efficient-Adam. Namun jumlah byte yang digunakan teknik gabungan berkurang karena terdapat pengurangan jumlah komunikasi.
+  \item Teknik gabungan menggunakan lebih banyak byte untuk berkomunikasi dibandingkan teknik Efficient-Adam. Namun jumlah byte yang digunakan teknik gabungan tetap berkurang karena terdapat pengurangan jumlah komunikasi.
 \end{enumerate}
 
 \section{Saran}
-Saat ini, terdapat banyak teknik yang mampu mengurangi jumlah komunikasi serta jumlah bit yang digunakan dalam komunikasi. Pemilihan teknik mungkin berpengaruh pada jumlah komunikasi serta model yang dihasilkan. Oleh karena itu, perlu diteliti lebih jauh mengenai kombinasi teknik-teknik lain yang mampu mengurangi komunikasi lebih baik lagi.
-
-Selain itu, pengujian juga hanya dilakukan dengan melakukan klasifikasi gambar. Model dalam ranah lain mungkin akan memberikan hasil yang berbeda. Oleh karena itu, pengujian dapat diperluas dengan menguji model dalam ranah lain, seperti dalam ranah pemahaman teks.
+\begin{enumerate}
+  \item Memilih teknik lain untuk digabungkan, untuk melihat pengaruh berbagai teknik.
+  \item Pengujian menggunakan model dalam ranah selain \emph{computer vision}.
+  \item Pengujian menggunakan \emph{dataset} lain.
+\end{enumerate}

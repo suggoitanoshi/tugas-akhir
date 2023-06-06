@@ -42,6 +42,7 @@
 \usepackage{afterpage}
 \usepackage{relsize}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{algpseudocode}
@@ -165,8 +166,12 @@
 \titleformat*{\subsection}{\large\bfseries}
 \titleformat*{\subsubsection}{\large\bfseries}
 
+\theoremstyle{definition}
+\newtheorem{definition}{Definisi}[section]
+
 % autoref prefix
 \def\tableautorefname{Tabel}
 \def\figureautorefname{Gambar}
 \def\algorithmautorefname{Algoritma}
 \def\equationautorefname{Persamaan}
+\def\definitionautorefname{Definisi}
