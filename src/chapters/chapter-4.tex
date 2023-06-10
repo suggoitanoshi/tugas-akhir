@@ -5,7 +5,7 @@ Pada bab ini, akan dibahas implementasi dari modifikasi pengoptimasi yang sebelu
 \section{Implementasi}
 Algoritma pengoptimasi yang dijelaskan dalam penelitian \textcite{Chen2022Efficient} dan \textcite{Chen2021CADA} masing-masing akan diimplementasikan menggunakan pustaka PyTorch dengan arsitektur \emph{parameter server}. Kemudian, implementasi penggabungan akan didasarkan kepada hasil implementasi kedua pengoptimasi.
 
-Setiap pengoptimasi akan dibagi menjadi tiga bagian, yakni \emph{parameter server}, \emph{trainer}, dan \emph{runner}. Bagian \emph{parameter server} memiliki tugas umum menjadi \emph{node} yang menyimpan model utama. Kemudian, \emph{trainer} akan mendapatkan parameter model dari \emph{parameter server} dan melakukan perhitungan gradien. Gradien yang telah dihitung lalu dikirim kembali kepada \emph{parameter server} untuk memperbarui parameter model. Bagian yang akan mengorkestrasi hubungan ini adalah \emph{runner}.
+Setiap pengoptimasi akan dibagi menjadi tiga bagian, yakni \emph{parameter server}, \emph{trainer}, dan \emph{runner}. Bagian \emph{parameter server} memiliki tugas umum menjadi \emph{node} yang menyimpan model utama. Kemudian, \emph{trainer} akan menjadi \emph{worker}, menerima parameter model dari \emph{parameter server} dan melakukan perhitungan gradien. Gradien yang telah dihitung lalu dikirim kembali kepada \emph{parameter server} untuk memperbarui parameter model. Bagian yang akan mengorkestrasi hubungan ini adalah \emph{runner}.
 
 Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \textit{parameter server} serta bagian \textit{worker}. Algoritma untuk \textit{parameter server} dapat dilihat pada \autoref{myadam_server}. Algoritma untuk \textit{worker} dapat dilihat pada \autoref{myadam_worker}. Kondisi yang digunakan untuk menentukan pengiriman dari tiap \textit{worker} dapat dilihat pada \autoref{cada2cond}. Untuk menyingkat penulisan, diasumsikan semua contoh data adalah contoh data pada iterasi $t$, sehingga gradien fungsi f untuk contox $\xi_t$ adalah $\nabla f_t$.
 
@@ -61,7 +61,7 @@ Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \texti
 
 \section{Pengujian}
 \subsection{Lingkungan Pengujian}
-Pengujian dilakuan pada server DGX dengan spesifikasi pada \autoref{dgx}. Namun, pengujian dilakukan dengan melakukan simulasi \emph{deep learning} terdistribusi pada hanya satu GPU.
+Pengujian dilakuan pada server DGX dengan spesifikasi pada \autoref{dgx}. Namun, pengujian dilakukan dengan melakukan simulasi \emph{deep learning} terdistribusi pada hanya satu GPU. Seluruh operasi terhadap model dilakukan dalam GPU. Oleh karena itu, \emph{parameter server} akan menyimpan model dalam GPU, dan \emph{trainer} juga akan menyimpan salinan model masing-masing dalam GPU yang sama.
 
 \begin{table}[H]
   \caption{Spesifikasi Lingkungan Pengujian}\label{dgx}

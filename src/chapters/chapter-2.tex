@@ -2,21 +2,20 @@
 Pada bab ini, akan dikaji literatur yang terkait \emph{Deep Learning} Terdistribusi. Pokok bahasan utama dalam bab ini adalah teori yang mendasari \emph{Deep Learning}, yang merujuk kepada \textcite{JiangDistributed}, \textcite{Choi2019}, \textcite{Fan2019}, serta \textcite{LeCun2015}. Kemudian, akan dibahas pula implementasi \emph{Deep Learrning} Terdistribusi yang ada saat ini.
 
 \section{Machine Learning}
-Teknik \emph{Supervised Machine Learning} modern mencari suatu fungsi dengan mempelajari himpunan \emph{training data}:
-\begin{equation}
-  \{(x_i, y_i)\}_{1 \le i \le n}
-\end{equation}
-dimana $x_i \in \mathbb{R}^d$ disebut sebagai fitur,  $y_i \in \mathbb{R}$ disebut sebagai label, dan $n$ merupakan jumlah \emph{training data} yang akan dipelajari. Dari \emph{training data} tersebut, akan dicari fungsi $f: \mathbb{R}^d \mapsto \mathbb{R}$ dari kelas fungsi $\mathcal{F}$ yang dapat memprediksi \emph{output} $y_i$ berdasarkan \emph{input} $x_i$ dengan baik.
+Berdasarkan literatur \textcite{Fan2019} serta \textcite{bishop2006pattern}, teknik \emph{Supervised Machine Learning} modern mencari suatu fungsi dengan mempelajari himpunan \emph{training data} $\{(x_i, y_i)\}_{1 \le i \le n}$, dimana $x_i \in \mathbb{R}^d$ disebut sebagai fitur,  $y_i \in \mathbb{R}$ disebut sebagai label, dan $n$ merupakan jumlah \emph{training data} yang akan dipelajari. Dari \emph{training data} tersebut, akan dicari fungsi $f: \mathbb{R}^d \mapsto \mathbb{R}$ dari kelas fungsi $\mathcal{F}$ yang dapat memprediksi \emph{output} $y_i$ berdasarkan \emph{input} $x_i$ dengan baik.
 
-Terdapat beragam kelas fungsi \(\mathcal{F}\) yang dapat dipilih untuk mempelajari himpunan \emph{training data}. Contoh teknik terkait adalah regresi linear yang menggunakan kelas fungsi linear untuk mempelajari \emph{training data}. Selain itu, terdapat pula teknik \emph{deep learning} yang menggunakan kelas komposisi fungsi berikut:
+Terdapat beragam kelas fungsi \(\mathcal{F}\) yang dapat dipilih untuk mempelajari himpunan \emph{training data}. Contoh teknik terkait adalah regresi linear yang menggunakan kelas fungsi linear untuk mempelajari \emph{training data}. Selain itu, terdapat pula teknik \emph{deep learning} yang menggunakan kelas komposisi fungsi berikut \parencite{LeCun2015}.
 \begin{equation}
   \{
   f(x;\theta) = W_L\sigma_L(W_{L-1} \cdots \sigma_2(W_2\sigma_1(W_1 x)))\ \vert \ \theta = \{W_1,\dots,W_L\}
   \}
 \end{equation}
+Dimana $L$ menyatakan jumlah \emph{layer} yang umumnya disebut sebagai kedalaman sebuah model, $W_i$ merupakan bobot untuk keluaran fungsi ke-$i$, dan fungsi $\sigma_i$ merupakan fungsi aktivasi ke-$i$.
 
 \section{Deep Learning}
-Istilah \emph{deep learning} atau \emph{deep neural network} digunakan secara umum untuk menggambarkan sebuah model \emph{neural network} yang memiliki satu atau lebih \emph{hidden layer}. Struktur model \emph{neural network} dapat mengandung sebuah \emph{input layer}, beberapa \emph{hidden layer}, dan sebuah \emph{output layer}. Satu \emph{layer} dapat terdiri dari beberapa simpul yang masing-masing memiliki fungsi aktivasi nonlinear $\sigma$.
+Istilah \emph{deep learning} atau \emph{deep neural network} digunakan secara umum untuk menggambarkan sebuah model \emph{neural network} yang memiliki satu atau lebih \emph{hidden layer} \parencite{Fan2019,LeCun2015}. Struktur model \emph{neural network} dapat mengandung sebuah \emph{input layer}, beberapa \emph{hidden layer}, dan sebuah \emph{output layer}.
+
+Menurut \textcite{Bengio2021}, struktur model yang memiliki beberapa lapisan fungsi memungkinkan model untuk mempelajari data yang tidak linear. Selain itu, model yang lebih dalam memungkinkan adanya transformasi fitur menjadi lebih abstrak dalam komposisi fungsi, yang kemudian dapat digunakan oleh \emph{layer} Selanjutnya.
 
 \subsection{Model Deep Neural Network}
 Model \emph{deep neural network} merupakan komposisi dari beberapa fungsi aktivasi nonlinear $\sigma$. Untuk layer ke-$l$, \emph{output} yang dihasilkan adalah:
@@ -24,7 +23,7 @@ Model \emph{deep neural network} merupakan komposisi dari beberapa fungsi aktiva
   h^{(l)} = g^{(l)}(h^{(l-1)}) = \sigma(W^{(l)}h^{(l-1)} + b^{(l)})
 \end{equation}
 
-dengan $l \in \{1,2,\dots,L\}$, khususnya $h^{(0)} = x$, $W^{(l)}$ adalah matriks bobot, dan $b^{(l)}$ adalah matriks bias untuk \emph{layer} ke-$l$.
+dengan $l \in \{1,2,\dots,L\}$, $h^{(0)} = x$, $W^{(l)}$ adalah matriks bobot, dan $b^{(l)}$ adalah matriks bias untuk \emph{layer} ke-$l$.
 
 Beberapa fungsi yang umumnya digunakan sebagai fungsi aktivasi $\sigma$ adalah \emph{Rectified Linear Unit} (ReLU), \emph{sigmoid}, dan tanh. Selain itu, untuk \emph{output} multilabel atau lebih dari dua label, digunakan fungsi softmax pada \emph{output layer} untuk menghitung probabilitas dari fungsi linear. Definisi fungsi softmax adalah sebagai berikut:
 \begin{equation}
@@ -33,7 +32,7 @@ Beberapa fungsi yang umumnya digunakan sebagai fungsi aktivasi $\sigma$ adalah \
 \end{equation}
 dengan $K$ adalah kategori klasifikasi yang mungkin.
 
-Hasil dari \emph{Deep Learning} adalah sebuah fungsi penebak $\hat{f}$. Performa sebuah fungsi penebak $\hat{f}$ dapat dievaluasi menggunakan galat prediksi $\mathbb{P}(y \neq \hat{f}(x))$.
+Hasil dari \emph{Deep Learning} adalah sebuah fungsi penebak $\hat{f}$. Kinerja sebuah fungsi penebak $\hat{f}$ dapat dievaluasi menggunakan galat prediksi $\mathbb{P}(y \neq \hat{f}(x))$.
 
 \subsection{Algoritma Backpropagation}
 Pembelajaran yang dilakukan di dalam \emph{deep learning} adalah meminimasi fungsi objektif yang didefinisikan. Definisi fungsi objektif dapat dibuat dengan membandingkan hasil dari \emph{output layer} $h^{(L)}$ dengan label sebenarnya $y$. Fungsi objektif yang umum digunakan untuk masalah klasifikasi adalah \emph{multinomial logistic loss} yang didefinisikan sebagai:
@@ -69,7 +68,7 @@ Terdapat beberapa varian dari gradient descent untuk menghitung gradien, yang di
 
 Algoritma optimasi (selanjutnya disebut pengoptimasi) untuk gradient descent dirancang untuk mencoba menyelesaikan tantangan-tantangan yang ada pada gradient descent. Selain itu, pengoptimasi yang dirancang juga dapat mempercepat konvergensi model \emph{deep neural network} pada saat pembelajaran. Oleh karena itu, penting untuk memilih pengoptimasi yang tepat untuk pembelajaran sebuah model \emph{deep neural network}.
 
-Terdapat beberapa pengoptimasi yang dapat digunakan dalam pelatihan model \emph{deep neural network}. Beberapa pengoptimasi yang disebutkan oleh \textcite{Ruder2016} diantaranya adalah Momentum dari \textcite{qian1999momentum}, RMSProp dari \textcite{hinton2012neural}, Adam dari \textcite{ADAMKingma}, serta pengoptimasi lainnya. Perbandingan empiris antar pengoptimasi telah dilakukan oleh banyak penulis sebelumnya. Menurut \textcite{Choi2019}, pengoptimasi yang lebih umum tidak akan memiliki performa yang lebih buruk dibandingkan pengoptimasi yang lebih khusus. Hasil perbandingan yang dilakukan \textcite{benchmark2021schmidt} menyatakan Adam merupakan salah satu pilihan yang cukup baik untuk banyak permasalahan, dengan alternatif lain yakni \emph{Nesterov Accelerated Gradient}(NAG) dan RMSProp.
+Terdapat beberapa pengoptimasi yang dapat digunakan dalam pelatihan model \emph{deep neural network}. Beberapa pengoptimasi yang disebutkan oleh \textcite{Ruder2016} diantaranya adalah Momentum dari \textcite{qian1999momentum}, RMSProp dari \textcite{hinton2012neural}, Adam dari \textcite{ADAMKingma}, serta pengoptimasi lainnya. Perbandingan empiris antar pengoptimasi telah dilakukan oleh banyak penulis sebelumnya. Menurut \textcite{Choi2019}, pengoptimasi yang lebih umum tidak akan memiliki kinerja yang lebih buruk dibandingkan pengoptimasi yang lebih khusus. Hasil perbandingan yang dilakukan \textcite{benchmark2021schmidt} menyatakan Adam merupakan salah satu pilihan yang cukup baik untuk banyak permasalahan, dengan alternatif lain yakni \emph{Nesterov Accelerated Gradient}(NAG) dan RMSProp.
 
 \subsection{Pengoptimasi RMSProp}
 Pengoptimasi RMSProp dituliskan oleh \textcite{hinton2012neural} untuk mendemonstrasikan momentum perparameter dalam pengoptimasi SGD. Dalam tulisan tersebut, ditawarkan sebuah cara untuk memberikan \emph{learning rate} yang berbeda untuk setiap parameter. Salah satu cara yang ditulis untuk menentukan \emph{learning rate} masing-masing parameter adalah menggunakan \emph{local gain} $g(t)$ yang diinisialisasi menjadi 1 untuk setiap parameter. Kemudian, \emph{local gain} akan diperbarui dengan aturan berikut.
@@ -134,7 +133,8 @@ Komunikasi antar \emph{worker} menjadi sebuah pembatas kecepatan pembelajaran. P
 
 Pengurangan yang diberikan oleh \textcite{Chen2018LAG} dapat mempercepat proses pembelajaran. Akan tetapi, \textcite{Chen2021CADA} meninjau bahwa keefektifan dari algoritma tersebut akan berkurang seiring berjalannya pembelajaran. penelitian \textcite{Chen2021CADA} memberikan alternatif lain untuk mengurangi jumlah komunikasi yang diperlukan. Algoritma tersebut, yang diberi tajuk \emph{CADA}, memiliki kriteria yang berbeda dari \emph{lazily aggregated gradient}, dan telah ditunjukkan akan konvergen pada kondisi yang sesuai.
 
-Dalam CADA, pembaruan parameter dilakukan dengan mengambil gradien baru hanya dari sebagian \emph{worker}, sedangkan \emph{worker} lainnya akan menggunakan gradien sebelumnya. Terdapat dua varian CADA dengan kondisi yang berbeda. Kedua kondisi dapat dilihat pada \autoref{CADA1} dan \autoref{CADA2}.
+Dalam CADA, pembaruan parameter dilakukan dengan mengambil gradien baru hanya dari sebagian \emph{worker}, sedangkan \emph{worker} lainnya akan menggunakan gradien sebelumnya. Terdapat dua varian CADA dengan kondisi yang berbeda. Kedua varian kondisi dapat dilihat pada \autoref{CADA1} dan \autoref{CADA2}. Dalam kedua kondisi, \emph{worker} akan mengirimkan gradien apabila \autoref{CADA1} atau \autoref{CADA2} tidak terpenuhi. Kondisi tersebut dievaluasi pada setiap \emph{worker} untuk setiap \emph{iterasi}.
+
 \begin{equation}
   \label{CADA1}
   \|\tilde{\delta}_t^{(i)} - \tilde{\delta}^{(i)}_{\tau_t^{(i)}}\|^2 \leq \frac{c}{d_{max}} \sum_{d=1}^{d_{max}} \|\theta_{t+1-d} - \theta_{t-d}\|^2
