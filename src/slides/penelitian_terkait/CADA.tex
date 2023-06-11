@@ -1,0 +1,22 @@
+\subsection{CADA}
+\begin{frame}{CADA \parencite{Chen2021CADA}}
+  \begin{itemize}
+    \item Terdapat teknik \textit{Lazily Aggregated Gradient} \parencite{Chen2018LAG}
+          \begin{itemize}
+            \item Keefektifannya berkurang seiring berjalannya pembelajaran
+          \end{itemize}
+    \item Pengurangan komunikasi berdasarkan kriteria tertentu
+    \item Memilih \textit{worker} yang akan mengirim pembaruan parameter, dengan pertaksamaan:
+          \begin{itemize}
+            \item CADA 1
+                  \begin{equation*}
+                    \| \delta_m^k - \tilde{\delta}_m^{k-\tau_m^k} \|^2 \le \frac{c}{d_{\mathrm{max}}}\sum_{d=1}^{d_{\mathrm{max}}}\| \theta^{k+1-d} - \theta^{k-d} \|^2
+                  \end{equation*}
+            \item CADA 2
+                  \begin{equation*}
+                    \| \nabla \ell (\theta^k; \xi_m^k) - \nabla \ell (\theta_m^{k-\tau_m^k}; \xi_m^k) \|^2 \le \frac{c}{d_{\mathrm{max}}} \sum_{d=1}^{d_{\mathrm{max}}} \| \theta^{k+1-d} - \theta^{k-d} \|^2
+                  \end{equation*}
+          \end{itemize}
+    \item Apabila pertaksamaan tidak dipenuhi, maka \textit{worker} akan mengirimkan pembaruan parameter
+  \end{itemize}
+\end{frame}

@@ -1,0 +1,19 @@
+\begin{frame}{Rancangan Solusi}
+  \begin{itemize}
+    \item Mendesain modifikasi Adam yang menggabungkan CADA \parencite{Chen2021CADA} dan Efficient-Adam \parencite{Chen2022Efficient}
+          \begin{itemize}
+            \item Harapan: Mengurangi kebutuhan \textit{bandwidth} lebih jauh
+          \end{itemize}
+    \item Menggunakan pustaka \texttt{PyTorch} untuk abstraksi model Parameter Server serta pembangunan model Deep Learning
+    \item Menggunakan kode implementasi CADA dari studi sebelumnya\footnote{\url{https://github.com/ChrisYZZ/CADA-master}} sebagai dasar, dengan modifikasi.
+    \item Membuat implementasi Efficient-Adam serta gabungan di atas kerangka dari implementasi CADA yang telah dimodifikasi.
+    \item Memilih fungsi kuantisasi yakni pemetaan dari float64 ke float16
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Rancangan Solusi}
+  \begin{itemize}
+    \item Menguji implementasi CADA, Efficient-Adam, serta gabungan.
+    \item Membandingkan akurasi model, jumlah komunikasi, serta ukuran data yang digunakan untuk komunikasi dalam pengujian
+  \end{itemize}
+\end{frame}

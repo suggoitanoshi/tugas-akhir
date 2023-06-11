@@ -1,0 +1,33 @@
+\begin{frame}{Deep Learning}
+  \begin{center}
+    \includestandalone[height=6em]{figures/dnn}
+  \end{center}
+  \begin{itemize}
+    \item Deep Learning banyak digunakan dalam banyak domain
+    \item Sebuah model deep neural network memiliki parameter yang dapat dipelajari
+    \item Pembelajaran pada Deep Learning banyak menggunakan teknik \textit{backpropagation}
+    \item Arah perkembangan model Deep Learning umumnya adalah memperbanyak parameter untuk mendapat hasil yang lebih baik
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{\textit{Backpropagation}}
+  \begin{itemize}
+    \item Digunakan untuk meminimasi \textit{fungsi objektif} $J$
+    \item Fungsi objektif $J$ didapatkan dengan membandingkan \textit{output layer} dengan label sebenarnya
+    \item Gradien dari fungsi objektif digunakan untuk memperbarui parameter-parameter dari model deep neural network
+    \item Gradien untuk layer ke-$l-1$: $$\frac{\partial J}{\partial h^{(l-1)}} = \frac{\partial h^{(l)}}{\partial h^{(l-1)}} \frac{\partial J}{\partial h^{(l)}}$$ dimana J merupakan fungsi objektif yang dipilih
+    \item Perhitungan gradien pada layer terakhir dilakukan dengan menurunkan fungsi objektif terhadap \textit{output} layer terakhir
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Pengoptimasi Deep Learning}
+  \begin{itemize}
+    \item Terdapat pengoptimasi untuk backpropagation
+          \begin{itemize}
+            \item Algoritma yang digunakan untuk mengoptimasi parameter berdasarkan gradien yang didapat pada backpropagation
+            \item Menyelesaikan tantangan pada gradient descent
+            \item Mempercepat konvergensi model
+          \end{itemize}
+    \item Pengoptimasi untuk pembelajaran: SGD, \textbf{Adam}, RMSProp, ...
+  \end{itemize}
+\end{frame}

@@ -1,0 +1,11 @@
+\subsection{Analisis Hasil Pengujian}
+\begin{frame}{Analisis Hasil Pengujian}
+  \begin{itemize}
+    \item Teknik gabungan menggunaka jumlah byte yang lebih sedikit dibanding CADA, namun lebih banyak dibandingkan Efficent-Adam.
+    \item Jumlah byte tambahan yang digunakan dalam teknik gabungan adalah komunikasi nilai ambang.
+    \item Pengurangan jumlah komunikasi dalam skenario Fashion-MNIST tidak ada, karena jumlah parameter yang lebih sedikit, nilai ambang akan lebih kecil sehingga lebih mudah untuk mencapai nilai tersebut.
+    \item Pengurangan jumlah komunikasi dalam skenario CIFAR10 lebih banyak, karena nilai ambang yang lebih besar.
+    \item Jumlah komunikasi pada CADA tidak berkurang banyak karena pemilihan \textit{hyperparameter} yang menyebabkan selisih gradien besar.
+    \item Pemilihan \textit{hyperparameter} yang berbeda menyebabkan model lebih sulit konvergen ke akurasi yang lebih tinggi.
+  \end{itemize}
+\end{frame}

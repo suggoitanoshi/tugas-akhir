@@ -1,0 +1,41 @@
+\subsection{Lingkungan Pengujian}
+\begin{frame}{Lingkungan Pengujian}
+  Pengujian dilakukan pada server DGX, menggunakan satu GPU yang dialokasikan. Setiap trainer dan parameter server dijalankan pada GPU yang sama.
+
+  \begin{table}
+    \caption{Spesifikasi Server DGX}
+    \centering
+    \begin{tabular}[ht]{ | c | c | }
+      \hline
+      \textbf{Parameter} & \textbf{Spesifikasi}                           \\
+      \hline
+      CPU                & 2x Intel Xeon E5-2698 v3 (16-core, Haswell-EP) \\
+      \hline
+      RAM                & 512GB DDR4-2133                                \\
+      \hline
+      GPU                & 8x Tesla V100 32GB VRAM                        \\
+      \hline
+      Penyimpanan        & 4x1.92 TB SSD                                  \\
+      \hline
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Lingkungan Pengujian}
+  Versi kakas dan pustaka yang digunakan dalam pengujian
+  \begin{table}
+    \caption{Versi Perangkat Lunak}\label{softwares}
+    \centering
+    \begin{tabular}{ | c | c | }
+      \hline
+      \textbf{Perangkat Lunak} & \textbf{Versi} \\
+      \hline
+      Python                   & 3              \\
+      \hline
+      PyTorch                  & 1.13.1+cuda    \\
+      \hline
+      TorchVision              & 0.14.1+cuda    \\
+      \hline
+    \end{tabular}
+  \end{table}
+\end{frame}

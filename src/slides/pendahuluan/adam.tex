@@ -1,0 +1,13 @@
+\begin{frame}{Pengoptimasi Adam}
+  \begin{enumerate}
+    \item Pengoptimasi digunakan untuk mempelajari parameter pada model
+    \item Adam \parencite{ADAMKingma} menggunakan \textit{learning rate} adaptif untuk setiap parameter
+    \item Adam menggunakan estimasi momen orde pertama dan kedua untuk membantu pembelajaran
+    \item Terdapat modifikasi Adam untuk pembelajaran model Deep Learning Terdistribusi
+          \begin{itemize}
+            \item CADA: Communication Adaptive Distributed Adam - pengurangan komunikasi \parencite{Chen2021CADA}
+            \item Efficient-Adam: kompresi bobot menggunakan kuantisasi \parencite{Chen2022Efficient}
+          \end{itemize}
+    \item Belum ada modifikasi Adam yang mengurangi komunikasi serta melakukan kuantisasi secara bersamaan
+  \end{enumerate}
+\end{frame}

@@ -1,0 +1,63 @@
+\subsection{Algoritma}
+\begin{frame}{Algoritma Parameter Server}
+  \begin{algorithm}[H]
+    \caption{Algoritma Parameter Server}
+    \begin{algorithmic}[1]
+      \State \textbf{Parameter:} Fungsi Kuantisasi $\mathcal{Q}_s$
+      \State \textbf{Inisialisasi} vektor parameter $\theta_0$, error term $e_1 \gets 0$
+      \State Sebarkan $\theta_0$ ke semua \textit{worker}
+      \For{$t = 1,2,\dots,T$}
+      \State $\hat{\delta_t} \gets \textnormal{rata-rata } \delta_t^{(i)}$ dari setiap \textit{worker}
+      \State Sebarkan $\tilde{\delta_t} \gets \mathcal{Q}(\hat{\delta_t} + e_t)$
+      \State $e_{t+1} \gets e_{t}$
+      \State $\theta_{t+1} \gets \theta_t - \tilde{\delta_t}$
+      \EndFor
+    \end{algorithmic}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Algoritma Worker}
+  \begin{algorithm}[H]
+    \caption{Modifikasi Adam untuk Worker ke-$i$}
+    \begin{algorithmic}[1]
+      \State \textbf{Parameter:} Fungsi Kuantisasi $\mathcal{Q}_w$, Hyperparameter Adam $\alpha, \beta_1, \beta_2$, konstanta batas $c$, batas maksimum penundaan $D$
+      \State $m_0^{(i)} \gets 0, v_0^{(i)} \gets \epsilon, e_1^{(i)} \gets 0, \tau^{(i)} \gets 0$
+      \State $\theta^{(i)}_0 \gets \theta_1$ dari server
+      \For{$t=1,2,\dots,T$}
+      \State $g_t^{(i)} \gets \nabla_\theta f_t(\theta_{t})$
+      \State $v_t^{(i)} \gets \theta_t v_{t-1}^{(i)} + (1-\theta_t)[g_t^{(i)}]^2$
+      \State $m_t^{(i)} \gets \beta_1 m_{t-1}^{(i)} + (1-\beta_1)g_t^{(i)}$
+      \State $\alpha_t \gets \alpha \sqrt{1-\beta_2^t}/(1-\beta_1^t)$
+      \State $\delta^{(i)} \gets \alpha_t m_t^{(i)}/\sqrt{v_t^{(i)}}+e_t^{(i)}$
+      \State $\theta_t \gets \theta_{t-1} - \delta^{(i)}$
+      \algstore{worker}
+    \end{algorithmic}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Algoritma Worker}
+  \begin{algorithm}[H]
+    \begin{algorithmic}[1]
+      \algrestore{worker}
+      \State Hitung $\nabla f_t(\theta^{(i)}_{t})$ dan $\nabla f_t(\theta^{(i)}_{t-\tau})$
+      \State $\delta^{(i)} \gets \mathcal{Q}_w(\delta^{(i)})$
+      \If{Kondisi \ref{cada2cond} tidak terpenuhi atau $\tau \ge D$}
+      \State Kirim $\delta^{(i)}$
+      \State $\tau \gets 1$
+      \Else
+      \State $\tau \gets \tau + 1$
+      \EndIf
+      \State $e_{t+1}^{(i)} \gets \alpha_t \frac{m_t^{(i)}}{\sqrt{v_t^{(i)}}} + e_t^{(i)} - \delta_t^{(i)}$
+      \State Terima $\tilde{\delta_t}$ dari server
+      \State $\theta_{t} \gets \theta_{t-1} - \tilde{\delta_t}$
+      \EndFor
+    \end{algorithmic}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}{Kondisi Worker}
+  \begin{equation}
+    \label{cada2cond}
+    \|\nabla f_t(\theta_t) - \nabla f_t(\theta_{t-\tau})\|^2 \leq \frac{c}{D} \sum_{d=1}^{D} \|\theta_{t+1-d} - \theta_{t-d}\|^2
+  \end{equation}
+\end{frame}
