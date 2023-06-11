@@ -2,6 +2,9 @@
 
 Repository ini berisi Tugas Akhir dari penulis, Fransiskus Febryan Suryawan.
 Seluruh teks di bawah berasal dari [Templat asal](https://github.com/darkGrimoire/ta1-latex-itb).
+Terdapat beberapa perubahan atas templat asal yang dibuat, yakni penambahan beberapa `package` LaTeX yang digunakan. Beberapa diantaranya yakni `algorithmicx`, `pgfgantt`, `tikz`, dan `amsmath`. Selain itu, beberapa berkas juga dihapus karena tidak digunakan.
+
+Untuk seluruh package yang diperlukan, silakan inspeksi pada `if-itb-thesis.sty`.
 
 # Templat LaTeX Tesis Informatika ITB
 
