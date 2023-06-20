@@ -5,14 +5,28 @@ Pada bab ini, akan dibahas implementasi dari modifikasi pengoptimasi yang sebelu
 \section{Implementasi}
 Algoritma pengoptimasi yang dijelaskan dalam penelitian \textcite{Chen2022Efficient} dan \textcite{Chen2021CADA} masing-masing akan diimplementasikan menggunakan pustaka PyTorch dengan arsitektur \emph{parameter server}. Kemudian, implementasi penggabungan akan didasarkan kepada hasil implementasi kedua pengoptimasi.
 
-Setiap pengoptimasi akan dibagi menjadi tiga bagian, yakni \emph{parameter server}, \emph{trainer}, dan \emph{runner}. Bagian \emph{parameter server} memiliki tugas umum menjadi \emph{node} yang menyimpan model utama. Kemudian, \emph{trainer} akan menjadi \emph{worker}, menerima parameter model dari \emph{parameter server} dan melakukan perhitungan gradien. Gradien yang telah dihitung lalu dikirim kembali kepada \emph{parameter server} untuk memperbarui parameter model. Bagian yang akan mengorkestrasi hubungan ini adalah \emph{runner}.
+Setiap pengoptimasi akan dibagi menjadi tiga bagian, yakni \emph{parameter server}, \emph{trainer}, dan \emph{runner}. Bagian \emph{parameter server} memiliki tugas umum menjadi \emph{node} yang menyimpan model utama. Kemudian, \emph{trainer} akan menjadi \emph{worker}, menerima parameter model dari \emph{parameter server} dan melakukan perhitungan gradien. Gradien yang telah dihitung lalu dikirim kembali kepada \emph{parameter server} untuk memperbarui parameter model. Bagian yang akan mengorkestrasi hubungan ini adalah \emph{runner}. Arsitektur yang akan digunakan dapat dilihat pada \autoref{arsi1} dan \autoref{arsi2}.
 
-Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \textit{parameter server} serta bagian \textit{worker}. Algoritma untuk \textit{parameter server} dapat dilihat pada \autoref{myadam_server}. Algoritma untuk \textit{worker} dapat dilihat pada \autoref{myadam_worker}. Kondisi yang digunakan untuk menentukan pengiriman dari tiap \textit{worker} dapat dilihat pada \autoref{cada2cond}. Untuk menyingkat penulisan, diasumsikan semua contoh data adalah contoh data pada iterasi $t$, sehingga gradien fungsi f untuk contox $\xi_t$ adalah $\nabla f_t$.
+\begin{figure}[H]
+  \centering
+  \includestandalone{figures/ps_architecture}
+  \caption{\label{arsi1}Arsitektur parameter server untuk CADA}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includestandalone{figures/quantize_architecture}
+  \caption{\label{arsi2}Arsitektur parameter server dengan kuantisasi}
+\end{figure}
+
+Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \textit{parameter server} serta bagian \textit{worker}. Algoritma untuk \textit{parameter server} dapat dilihat pada \autoref{myadam_server}. Algoritma untuk \textit{worker} dapat dilihat pada \autoref{myadam_worker}. Kondisi yang digunakan untuk menentukan pengiriman dari tiap \textit{worker} dapat dilihat pada \autoref{cada2cond}. Untuk menyingkat penulisan, diasumsikan semua contoh data adalah contoh data pada iterasi $t$, sehingga gradien fungsi f untuk contoh $\xi_t$ adalah $\nabla f_t$.
 
 \begin{equation}
   \label{cada2cond}
   \|\nabla f_t(\theta_t) - \nabla f_t(\theta_{t-\tau})\|^2 \leq \frac{c}{d_{max}} \sum_{d=1}^{d_{max}} \|\theta_{t+1-d} - \theta_{t-d}\|^2
 \end{equation}
+
+Dengan $\theta_t$ adalah parameter pada iterasi ke-$t$ dan $d_{max}$ merupakan jumlah iterasi yang akan digunakan untuk dirata-ratakan.
 
 \begin{algorithm}[H]
   \setstretch{1}
@@ -61,7 +75,7 @@ Algoritma untuk pengoptimasi gabungan akan dibagi menjadi 2, yakni bagian \texti
 
 \section{Pengujian}
 \subsection{Lingkungan Pengujian}
-Pengujian dilakuan pada server DGX dengan spesifikasi pada \autoref{dgx}. Namun, pengujian dilakukan dengan melakukan simulasi \emph{deep learning} terdistribusi pada hanya satu GPU. Seluruh operasi terhadap model dilakukan dalam GPU. Oleh karena itu, \emph{parameter server} akan menyimpan model dalam GPU, dan \emph{trainer} juga akan menyimpan salinan model masing-masing dalam GPU yang sama.
+Pengujian dilakukan pada server DGX dengan spesifikasi pada \autoref{dgx}. Namun, pengujian dilakukan dengan melakukan simulasi \emph{deep learning} terdistribusi pada hanya satu GPU. Seluruh operasi terhadap model dilakukan dalam GPU. Oleh karena itu, \emph{parameter server} akan menyimpan model dalam GPU, dan \emph{trainer} juga akan menyimpan salinan model masing-masing dalam GPU yang sama.
 
 \begin{table}[H]
   \caption{Spesifikasi Lingkungan Pengujian}\label{dgx}
@@ -200,7 +214,7 @@ Pemilihan \emph{hyperparameter} untuk masing-masing teknik dapat dilihat pada \a
 
 \subsection{Hasil Pengujian}
 
-Hasil yang akan dibandingkan dalam kedua skenario adalah jumlah komunikasi serta jumlah byte yang digunakan untuk komunikasi. Akurasi deri setiap model juga akan dibandingkan untuk mengevaluasi model akhir yang dihasilkan.
+Hasil yang akan dibandingkan dalam kedua skenario adalah jumlah komunikasi serta jumlah byte yang digunakan untuk komunikasi. Akurasi dari setiap model juga akan dibandingkan untuk mengevaluasi model akhir yang dihasilkan.
 
 \subsubsection{\emph{Dataset} Fashion-MNIST}
 
@@ -268,6 +282,6 @@ Pemilihan nilai \emph{hyperparameter} yang berbeda, seperti memilih nilai $\alph
 
 Pemilihan \emph{hyperparameter} $\beta_1$ maupun $\beta_2$ juga dapat memengaruhi kecepatan konvergensi serta akurasi model yang dihasilkan. Nilai $\beta_1$ dan $\beta_2$ yang lebih besar dapat membantu dalam pelatihan agar tidak terjebak dalam minima lokal, namun model lebih sulit untuk konvergen karena momentum yang terlalu besar.
 
-Pemilihan nilai $c$ yang digunakan sebagai konstanta dalam \autoref{cada2cond} memengaruhi jumlah komunikasi yang diperlukan oleh CADA maupun teknik gabungan. Apabila nilai c terlalu besar, maka komunikasi yang dilakukan akan menjadi sedikit sehingga konvergensi model semakin lambat. Namun, apabila nilai c terlalu kecil, maka pengurangan komunikasi akan terjadi lebih jarang.
+Pemilihan nilai $c$ yang digunakan sebagai konstanta dalam \autoref{cada2cond} memengaruhi jumlah komunikasi yang diperlukan oleh CADA maupun teknik gabungan. Apabila nilai $c$ terlalu besar, maka komunikasi yang dilakukan akan menjadi sedikit sehingga konvergensi model semakin lambat. Namun, apabila nilai $c$ terlalu kecil, maka pengurangan komunikasi akan terjadi lebih jarang.
 
 Pemilihan nilai $D$ serta $d_{max}$ sebagai \emph{hyperparameter} juga dapat memengaruhi jumlah komunikasi yang diperlukan. Akibatnya, konvergensi model juga akan terpengaruh. Pemilihan nilai $D$ akan berpengaruh terhadap komunikasi yang dilakukan oleh \emph{worker} tertentu apabila \emph{worker} tersebut tidak memberikan peningkatan gradien yang besar. Selain itu, nilai $d_{max}$ akan memengaruhi nilai ambang yang dihasilkan. Semakin besar nilai $d_{max}$, maka semakin banyak nilai ambang historis yang akan memengaruhi nilai ambang selanjutnya.

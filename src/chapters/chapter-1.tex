@@ -21,36 +21,36 @@ Paralelisasi perhitungan dalam \emph{deep learning} dapat mempercepat proses pem
 
 Penelitian dari \textcite{Chen2021CADA} memberikan alternatif pembaruan bobot dalam lingkungan terdistribusi dengan menggunakan kriteria tertentu untuk menentukan \emph{worker} yang harus mengirimkan parameter dan \emph{worker} yang tidak perlu mengirimkan parameter. Aturan pembaruan ini dapat mengurangi jumlah komunikasi yang diperlukan, namun tetap menjamin konvergensi model. Akibatnya, pembelajaran dapat dilakukan dengan lebih efisien. Teknik ini diberi tajuk CADA, "Communication-Adaptive Distributed Adam."
 
-Penelitian lain dari \textcite{Chen2022Efficient} memberikan alternatif untuk mengurangi beban komunikasi dengan mengurangi data yang dikirimkan. Ukuran data dikurangi dengan cara melakukan kuantisasi. Untuk mengatasi masalah bias, \textcite{Chen2022Efficient} menggunakan \emph{error\+feedback}. Akibatnya, beban komunikasi dapat dikurangi. Teknik ini diberi tajuk Efficient-Adam.
+Penelitian lain dari \textcite{Chen2022Efficient} memberikan alternatif untuk mengurangi beban komunikasi dengan mengurangi ukuran pembaruan parameter yang dikirimkan. Ukuran pembaruan parameter dikurangi dengan cara melakukan kuantisasi. Untuk mengatasi masalah bias, \textcite{Chen2022Efficient} menggunakan \emph{error\+feedback}. Akibatnya, beban komunikasi dapat dikurangi. Teknik ini diberi tajuk Efficient-Adam.
 
 \section{Rumusan Masalah}
-Algoritma pengoptimasi Adam dalam lingkungan terdistribusi memiliki banyak modifikasi. Beberapa yang telah disebutkan yakni algoritma dari \textcite{Chen2021CADA} serta \textcite{Chen2022Efficient}. Algoritma dari \textcite{Chen2021CADA} mengoptimasi komunikasi dengan mengurangi jumlah komunikasi. Algoritma dari \textcite{Chen2022Efficient} mengoptimasi komunikasi dengan mengurangi ukuran data yang dikirimkan saat komunikasi.
+Algoritma pengoptimasi Adam dalam lingkungan terdistribusi memiliki banyak modifikasi. Beberapa yang telah disebutkan yakni algoritma dari \textcite{Chen2021CADA} serta \textcite{Chen2022Efficient}. Algoritma dari \textcite{Chen2021CADA} mengoptimasi komunikasi dengan mengurangi jumlah komunikasi. Algoritma dari \textcite{Chen2022Efficient} mengoptimasi komunikasi dengan mengurangi ukuran pembaruan parameter yang dikirimkan saat komunikasi.
 
-Belum ada modifikasi pengoptimasi Adam yang secara bersamaan mengurangi jumlah komunikasi dan ukuran data yang dikirimkan. Maka, rumusan masalah dari tugas akhir ini ialah:
+Belum ada modifikasi pengoptimasi Adam yang secara bersamaan mengurangi jumlah komunikasi dan ukuran pembaruan parameter yang dikirimkan. Maka, rumusan masalah dari tugas akhir ini ialah:
 
 \begin{enumerate}
-    \item Bagaimana cara memodifikasi pengoptimasi Adam pada lingkungan terdistribusi sehingga ukuran data dan jumlah komunikasi dapat dikurangi?
-    \item Bagaimana perbandingan jumlah komunikasi dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2021CADA}, yakni CADA?
-    \item Bagaimana perbandingan ukuran data dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2022Efficient}, yakni EfficientAdam?
+  \item Bagaimana cara memodifikasi pengoptimasi Adam pada lingkungan terdistribusi sehingga ukuran pembaruan parameter dan jumlah komunikasi dapat dikurangi?
+  \item Bagaimana perbandingan jumlah komunikasi dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2021CADA}, yakni CADA?
+  \item Bagaimana perbandingan ukuran pembaruan parameter dari modifikasi tersebut terhadap algoritma dari \textcite{Chen2022Efficient}, yakni Efficient-Adam?
 \end{enumerate}
 
 \section{Tujuan}
 
 Berdasarkan rumusan masalah yang telah ditulis pada subbab sebelumnya, tujuan dari tugas akhir ini ialah:
 \begin{enumerate}
-    \item Melakukan modifikasi terhadap pengoptimasi Adam pada lingkungan terdistribusi untuk mengurangi ukuran data dan jumlah komunikasi.
-    \item Melakukan analisis komparatif dengan algoritma dari \textcite{Chen2021CADA}.
-    \item Melakukan analisis komparatif dengan algoritma dari \textcite{Chen2022Efficient}.
+  \item Melakukan modifikasi terhadap pengoptimasi Adam pada lingkungan terdistribusi untuk mengurangi ukuran pembaruan parameter dan jumlah komunikasi.
+  \item Melakukan analisis komparatif dengan algoritma dari \textcite{Chen2021CADA}.
+  \item Melakukan analisis komparatif dengan algoritma dari \textcite{Chen2022Efficient}.
 \end{enumerate}
 
 \section{Metodologi}
 
 Metodologi yang digunakan dalam tugas akhir ini ialah:
 \begin{enumerate}
-    \item Mempelajari metode yang digunakan pada penelitian \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient}.
-    \item Pengembangan modifikasi Adam menggunakan teknik yang digunakan pada penelitian \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient}.
-    \item Melakukan implementasi terhadap modifikasi yang dibuat.
-    \item Melakukan pengujian terhadap implementasi.
+  \item Mempelajari metode yang digunakan pada penelitian \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient}.
+  \item Pengembangan modifikasi Adam menggunakan teknik yang digunakan pada penelitian \textcite{Chen2021CADA} dan \textcite{Chen2022Efficient}.
+  \item Melakukan implementasi terhadap modifikasi yang dibuat.
+  \item Melakukan pengujian terhadap implementasi.
 \end{enumerate}
 
 % \section{Jadwal Pelaksanaan Tugas Akhir}
