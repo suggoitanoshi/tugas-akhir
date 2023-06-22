@@ -131,7 +131,7 @@ Perhitungan jumlah byte yang digunakan untuk komunikasi dilakukan dengan cara me
 
 Pemilihan \emph{hyperparameter} dilakukan secara terpisah untuk kedua skenario, dan untuk setiap teknik. Namun, \emph{learning rate} akan berkurang seiring bertambahnya epoch. Setiap epoch tertentu, \emph{learning rate} yang digunakan akan berkurang sebanyak setengah \emph{learning rate} saat itu. Untuk kedua skenario, pengurangan dilakukan setiap 100 epoch.
 
-Model yang digunakan untuk mengklasifikasi Fashion-MNIST adalah sebuah model dengan dua buah \emph{layer} konvolusi yang memiliki fungsi aktivasi ELU dan operasi \emph{max pooling}, diikuti oleh sebuah \emph{layer} yang terhubung penuh untuk membuat prediksi. Arsitektur model yang dibangun dapat dilihat pada \autoref{fashionmnist}. Model tersebut memiliki parameter sejumlah 24.778 yang terbagi dalam 7 \emph{layer}.
+Model yang digunakan untuk mengklasifikasi Fashion-MNIST adalah sebuah model dengan dua buah \emph{layer} konvolusi yang memiliki fungsi aktivasi ELU dan operasi \emph{max pooling}, diikuti oleh sebuah \emph{layer} yang terhubung penuh untuk membuat prediksi. Arsitektur model yang dibangun dapat dilihat pada \autoref{fashionmnist}. Model tersebut memiliki parameter sejumlah 24.778 yang terbagi dalam 7 \emph{layer}. Kemudian, sebagai perbandingan akan diuji sebuah model yang serupa namun dengan satu buah \emph{layer} tambahan untuk membandingkan efek dari jumlah \emph{layer} dan ukuran model.
 
 \begin{figure}
   \centering
@@ -169,6 +169,8 @@ Pemilihan \emph{hyperparameter} untuk model tersebut dapat dilihat pada \autoref
     \hline
   \end{tabular}
 \end{table}
+
+Nilai $c$ yang dipilih untuk teknik CADA dan gabungan dicari dengan mencoba beberapa nilai $c$ yang berbeda. Nilai awal $c$ diambil dari penelitian \textcite{Chen2021CADA} untuk \emph{dataset} MNIST, yakni 400. Kemudian, nilai $c$ yang lebih besar dicoba, yang menyebabkan pengurangan komunikasi lebih jauh namun konvergensi ke akurasi yang lebih rendah.
 
 
 Model yang digunakan untuk mengklasifikasi \emph{dataset} CIFAR-10 adalah ResNet-20. Model ResNet-20, atau secara umum ResNet, merupakan model yang menggunakan pemetaan residu $\mathcal{H}(x) = \mathcal{F}(x) + x$ \parencite{he2015deep}, yang memberikan prekondisi pemetaan identitas untuk model. Menurut eksperimen yang dilakukan \textcite{he2015deep}, pemetaan identitas merupakan prekondisi yang cukup masuk akal. Pemetaan residu dapat dibuat sebagai sebuah hubungan langsung dari titik tertentu ke titik lain, melompati beberapa \emph{layer}. Ilustrasi dari sebuah blok residu dapat dilihat pada \autoref{resblock}.
@@ -212,6 +214,8 @@ Pemilihan \emph{hyperparameter} untuk masing-masing teknik dapat dilihat pada \a
   \end{tabular}
 \end{table}
 
+Nilai $c$ diambil dengan mengambil nilai $c$ pada penelitian \textcite{Chen2021CADA} untuk \emph{dataset} CIFAR-10. Kemudian, sama seperti pada skenario Fashion-MNIST, dicari nilai $c$ yang lebih besar. Namun, nilai $c$ yang lebih besar menyebabkan pengurangan komunikasi yang lebih jauh namun konvergensi akurasi yang lebih rendah.
+
 \subsection{Hasil Pengujian}
 
 Hasil yang akan dibandingkan dalam kedua skenario adalah jumlah komunikasi serta jumlah byte yang digunakan untuk komunikasi. Akurasi dari setiap model juga akan dibandingkan untuk mengevaluasi model akhir yang dihasilkan.
@@ -240,6 +244,28 @@ Plot perbandingan jumlah byte yang digunakan dapat dilihat pada \autoref{fashion
   \centering
   \includegraphics[width=\textwidth]{fashion_bits.png}
   \caption{Perbandingan jumlah byte dalam skenario Fashion-MNIST}\label{fashion_bits}
+\end{figure}
+
+Terakhir, waktu yang dibutuhkan untuk menjalankan simulasi pada ketiga teknik adalah sekitar 12.907 detik untuk CADA, 14.114 detik untuk Efficient-Adam, serta 15.018 detik untuk teknik gabungan. Namun, perlu diperhatikan ketiga simulasi dijalankan pada kondisi beban yang bervariasi. Teknik gabungan membutuhkan waktu yang lebih banyak dibandingkan CADA serta Efficient-Adam karena terdapat perhitungan tambahan untuk mengevaluasi kondisi serta proses kuantisasi yang selalu dijalankan.
+
+Untuk perbandingan, hasil pelatihan model dengan \emph{layer} tambahan dapat dilihat pada \autoref{fashion_acc_2}, \autoref{fashion_bits_2}, \autoref{fashion_comms_2}. Berdasarkan data tersebut, tidak ada perbedaan yang terlihat antara model dasar dengan model yang memiliki \emph{layer} tambahan.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.8\textwidth]{fashion_acc_2.png}
+  \caption{Perbandingan akurasi dalam skenario Fashion-MNIST dengan layer tambahan}\label{fashion_acc_2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.8\textwidth]{fashion_bits_2.png}
+  \caption{Perbandingan jumlah byte dalam skenario Fashion-MNIST dengan layer tambahan}\label{fashion_bits_2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.8\textwidth]{fashion_comms_2.png}
+  \caption{Perbandingan jumlah komunikasi dalam skenario Fashion-MNIST dengan layer tambahan}\label{fashion_comms_2}
 \end{figure}
 
 
@@ -274,9 +300,11 @@ Plot perbandingan jumlah byte yang digunakan dapat dilihat pada \autoref{resnet_
 
 Berdasarkan pengujian yang dilakukan dalam kedua skenario, didapatkan bahwa teknik gabungan dapat menggunakan jumlah byte lebih sedikit dibandingkan CADA. Bahkan, teknik gabungan mampu mengurangi jumlah komunikasi dalam skenario pelatihan model yang lebih kompleks yakni ResNet-20. Namun, teknik gabungan tetap membutuhkan lebih banyak byte untuk melakukan komunikasi dibandingkan Efficient-Adam. Penyebab lebih banyaknya jumlah byte adalah adanya nilai tambahan yang perlu dikomunikasikan oleh \emph{parameter server}, yakni nilai ambang yang digunakan dalam \autoref{cada2cond}.
 
-Pengurangan jumlah komunikasi pada skenario \emph{dataset} CIFAR-10 lebih baik dibandingkan pada skenario \emph{dataset} Fashion-MNIST. Dalam skenario \emph{dataset} CIFAR-10, model ResNet-20 memiliki jumlah parameter yang banyak, sehingga nilai ambang yang dihitung akan lebih besar. Di sisi lain, model sederhana yang digunakan dalam skenario \emph{dataset} Fashion-MNIST memiliki jumlah parameter jauh lebih sedikit, sehingga nilai ambang yang didapatkan lebih kecil. Oleh karena itu, lebih mudah untuk mencapai nilai ambang pada skenario \emph{dataset} Fashion-MNIST.
+Pengurangan jumlah komunikasi pada skenario \emph{dataset} CIFAR-10 lebih baik dibandingkan pada skenario \emph{dataset} Fashion-MNIST. Dalam skenario \emph{dataset} CIFAR-10, model ResNet-20 memiliki jumlah parameter yang banyak, sehingga nilai ambang yang dihitung akan lebih besar. Di sisi lain, model sederhana yang digunakan dalam skenario \emph{dataset} Fashion-MNIST memiliki jumlah parameter jauh lebih sedikit, sehingga nilai ambang yang didapatkan lebih kecil. Meskipun nilai $c$ besar, namun apabila komunikasi dikurangi, akan memengaruhi konvergensi akurasi yang didapatkan.
 
 Kemudian, jumlah komunikasi yang dilakukan oleh CADA juga masih tidak berkurang sebanyak jumlah komunikasi dalam teknik gabungan. Hal ini mungkin disebabkan karena \emph{hyperparameter} yang dipilih menyebabkan nilai selisih gradien yang didapatkan selalu besar. Dampaknya, \autoref{cada2cond} jarang terpenuhi. Hal tersebut tidak terlihat pada teknik gabungan karena nilai pembaruan dikuantisasi. Hal tersebut menurunkan presisi nilai ambang. Kemudian, perkembangan gradien akan dipengaruhi oleh \emph{error-feedback}, sehingga perkembangan gradien mungkin menjadi lebih kecil.
+
+Pengurangan jumlah komunikasi serta pengurangan ukuran komunikasi dapat mengurangi waktu yang dibutuhkan untuk berkomunikasi. Dalam kedua skenario pengujian, waktu yang dikurangi tidak terlihat karena komunikasi dilakukan menggunakan \textit{Remote-Procedure Call} dalam satu mesin yang sama. Oleh karena itu, \emph{overhead} komunikasi antar mesin tidak ada. Namun, pengurangan jumlah komunikasi dapat menyebabkan pengurangan waktu komunikasi antar mesin.
 
 Pemilihan nilai \emph{hyperparameter} yang berbeda, seperti memilih nilai $\alpha$ yang lebih kecil atau lebih besar menyebabkan model yang dihasilkan memiliki akurasi lebih rendah. Penggunaan nilai $\alpha$ yang terlalu kecil dapat menyebabkan model mencapai minima lokal. Namun, penggunaan nilai $\alpha$ yang terlalu besar juga dapat menghambat proses pelatihan model.
 
