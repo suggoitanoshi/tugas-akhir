@@ -4,15 +4,27 @@
   "latex-workshop.latex.recipes": [
     {
       "name": "Build TA",
-      "tools": ["latex_report_make"]
+      "tools": [
+        "latex_report_make"
+      ]
     },
     {
       "name": "Build slides",
-      "tools": ["latex_slides_make"]
+      "tools": [
+        "latex_slides_make"
+      ]
+    },
+    {
+      "name": "Build paper",
+      "tools": [
+        "latex_paper_make"
+      ]
     },
     {
       "name": "Build current file",
-      "tools": ["latex_current_make"]
+      "tools": [
+        "latex_current_make"
+      ]
     }
   ],
   "latex-workshop.latex.tools": [
@@ -49,6 +61,21 @@
       "env": {}
     },
     {
+      "name": "latex_paper_make",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-shell-escape",
+        "-pdf",
+        "-bibtex",
+        "-outdir=%OUTDIR%",
+        "-cd",
+        "%WORKSPACE_FOLDER%/src/paper.tex"
+      ]
+    },
+    {
       "name": "latex_current_make",
       "command": "latexmk",
       "args": [
@@ -66,5 +93,10 @@
   "latex-workshop.synctex.afterBuild.enabled": true,
   "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/build",
   "latex-workshop.latex.autoBuild.run": "onSave",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "spellright.language": [],
+  "spellright.documentTypes": [
+    "markdown",
+    "plaintext"
+  ],
 }
