@@ -1,2 +1,34 @@
-\section{Background}
-\blindtext \cite{Bengio2021}
+\section{Introduction}
+Deep learning is a technique used to approximate some function $f$ given some training data. The appproximation is obtained by using a class of function composition\cite{LeCun2015},
+\begin{equation}
+  f(x) = \sigma_L(W_L\sigma_{L-1}(...\sigma_1(W_1x)))
+\end{equation}
+where $\sigma_i$ is called the activation function for the layer $i$, and $W_i$ is the weight of the $i$-th layer. This stacking of function provides the ability to approximate nonlinear functions\cite{Bengio2021}. The learning is done by updating the weights of each layer $W_i$ using backpropagation.
+
+Backpropagation algorithm are first described in \cite{rumelhart1987learning} used to learn the weights for deep learning model. First, a loss function or an objective function $J$ is chosen, to compare the output of approximated function $f$ given input x and the expected output. Then, the loss function is evaluated, and its derivative is taken. The derivative of the loss function is used to update weights for each layer, propagating from the output to the first layer. Let us define $h^{(l)} = \sigma(W^{(l)}h^{(l-1)})$ the output of $h$-th layer. The gradients for layer $l$ can be calculated as
+
+\begin{equation}
+  \frac{\partial J}{\partial h^{(l-1)}} = \frac{\partial h^{(l)}}{\partial h^{(l-1)}} \frac{\partial J}{h^{(l)}}
+\end{equation}
+
+where $J$ is the chosen loss function, and $h^{(l)}$ is the output of the $l$-th layer. The gradient can be used to calculate the new parameter for each layer as such
+
+\begin{equation}
+  \begin{split}
+    W^{(l)} \leftarrow W^{(l)} - \eta \frac{\partial J}{\partial W^{(l)}}\mathrm{, where }\\
+    \frac{\partial J}{\partial W^{(l)}_{ij}} = \frac{\partial J}{\partial h^{(l)}_i}\sigma'h_j^{(l-1)}
+  \end{split}
+\end{equation}
+
+where $\eta$ is called the learning rate. The learning rate, along with the number of parameters to be updated, are called hyperparameters of the model.
+To update the parameters, there are several optimizers developed to address challenges in stochastic gradient descent, such as momentum\cite{qian1999momentum}, RMSProp\cite{hinton2012neural}, and Adam\cite{ADAMKingma}.
+
+Distributed deep learning is a technique employed to speed up learning parameters by using several resources. One of the architectures used in distributed deep learning is parameter server\cite{JiangDistributed}. In this architecture, the training is split into several workers containing model replicas and data shard. Then, the model will be aggregated into a parameter server using some aggregation mechanism. An illustration of the parameter server is shown in \autoref{ps_architecture}
+
+\begin{figure}[htbp]
+  \centering
+  \includestandalone[width=0.8\columnwidth]{figures/ps_architecture.tex}
+  \caption{\label{ps_architecture}Parameter Server architecture illustration}
+\end{figure}
+
+Development of deep learning models have been to increase the depth and number of parameters. In turn, it will also increase the time needed to learn parameters. This is also true in distributed deep learning, since there are communication overhead. Studies have been conducted to reduce the communication overhead, either by using compression \cite{Chen2022Efficient, Chen2021Quantized} or by reducing communication rounds\cite{Chen2018LAG, Chen2021CADA}. Thus far, no study have conducted the merging of compression and reduction of communication rounds.

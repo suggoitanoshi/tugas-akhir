@@ -1,0 +1,51 @@
+\section{Merging of CADA and Efficient-Adam}
+To further reduce communication overhead of distributed deep learning, this paper will merge the algorithm of CADA and Efficient-Adam. The merged algorithm are shown in \autoref{myadam_server} for parameter server and \autoref{myadam_worker} for workers. The calculation part is mostly the same with Efficient-Adam, with the addition of condition from CADA.
+
+\begin{algorithm}[htbp]
+  \caption{Algorithm for Parameter Server}\label{myadam_server}
+  \begin{algorithmic}[1]
+    \State \textbf{Parameter:} Quantization function $\mathcal{Q}_s$
+    \State \textbf{Initialize} parameter vectors $\theta_0$, error term $e_1 \gets 0$
+    \State broadcast $\theta_0$ to all workers
+    \For{$t = 1,2,\dots,T$}
+    \State $\hat{\delta_t} \gets \textnormal{average } \delta_t^{(i)}$ from each \textit{worker}
+    \State broadcast $\tilde{\delta_t} \gets \mathcal{Q}(\hat{\delta_t} + e_t)$
+    \State $e_{t+1} \gets e_{t}$
+    \State $\theta_{t+1} \gets \theta_t - \tilde{\delta_t}$
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[htbp]
+  \caption{Algorithm for the $i$-th worker}\label{myadam_worker}
+  \begin{algorithmic}[1]
+    \State \textbf{Parameter:} Quantization function $\mathcal{Q}_w$, Hyperparameters $\alpha, \beta_1, \beta_2$, constant $c$, maximum delay $D$
+    \State $m_0^{(i)} \gets 0, v_0^{(i)} \gets \epsilon, e_1^{(i)} \gets 0, \tau^{(i)} \gets 0$
+    \State $\theta^{(i)}_0 \gets \theta_1$ from server
+    \For{$t=1,2,\dots,T$}
+    \State $g_t^{(i)} \gets \nabla_\theta f_t(\theta_{t})$
+    \State $v_t^{(i)} \gets \theta_t v_{t-1}^{(i)} + (1-\theta_t)[g_t^{(i)}]^2$
+    \State $m_t^{(i)} \gets \beta_1 m_{t-1}^{(i)} + (1-\beta_1)g_t^{(i)}$
+    \State $\alpha_t \gets \alpha \sqrt{1-\beta_2^t}/(1-\beta_1^t)$
+    \State $\delta^{(i)} \gets \alpha_t m_t^{(i)}/\sqrt{v_t^{(i)}}+e_t^{(i)}$
+    \State $\theta_t \gets \theta_{t-1} - \delta^{(i)}$
+    \State calculate $\nabla f_t(\theta^{(i)}_{t})$ and $\nabla f_t(\theta^{(i)}_{t-\tau})$
+    \State $\delta^{(i)} \gets \mathcal{Q}_w(\delta^{(i)})$
+    \If{condition \autoref{cada2cond} not fulfilled or $\tau \ge D$}
+    \State send $\delta^{(i)}$ to server
+    \State $\tau \gets 1$
+    \Else
+    \State $\tau \gets \tau + 1$
+    \EndIf
+    \State $e_{t+1}^{(i)} \gets \alpha_t \frac{m_t^{(i)}}{\sqrt{v_t^{(i)}}} + e_t^{(i)} - \delta_t^{(i)}$
+    \State receive $\tilde{\delta_t}$ from server
+    \State $\theta_{t} \gets \theta_{t-1} - \tilde{\delta_t}$
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+Influence of Efficient-Adam could be seen in most parts of the algorithm. Calculations are done following that of Efficient-Adam, although there are additional part to calculate gradient innovation. Error-feedback technique could be seen in line 6 of \autoref{myadam_server} and line 9 of \autoref{myadam_worker}. The condition used is taken from CADA2, and could be seen in \autoref{cada2cond}.
+\begin{equation}
+  \label{cada2cond}
+  \|\nabla f_t(\theta_t) - \nabla f_t(\theta_{t-\tau})\|^2 \leq \frac{c}{d_{max}} \sum_{d=1}^{d_{max}} \|\theta_{t+1-d} - \theta_{t-d}\|^2
+\end{equation}

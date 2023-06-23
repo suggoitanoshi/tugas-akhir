@@ -14,20 +14,20 @@
   \node[below=of PS] (Wcenter) {$\cdots$};
 
   \node[left=2cm of Wcenter] (W1) {Worker 1};
-  \node[module, below=1mm of W1] (W1M) {Model Penuh};
-  \node[module, below=1mm of W1M] (W1D) {Subset Training Data};
+  \node[module, below=1mm of W1] (W1M) {Model Replica};
+  \node[module, below=1mm of W1M] (W1D) {Training Data Subset};
   \node[fit=(W1) (W1M) (W1D), draw] (W1C) {};
 
   \node[right=2cm of Wcenter] (WM) {Worker M};
-  \node[module, below=1mm of WM] (WMM) {Model Penuh};
-  \node[module, below=1mm of WMM] (WMD) {Subset Training Data};
+  \node[module, below=1mm of WM] (WMM) {Model Replica};
+  \node[module, below=1mm of WMM] (WMD) {Training Data Subset};
   \node[fit=(WM) (WMM) (WMD), draw] (WMC) {};
 
   \draw[->] (PS.200) -- (W1C.75) node[anchor=south east] {$\theta$};
-  \draw[->] (W1C.54) -- (PS.210) node[anchor=north west] {gradien};
+  \draw[->] (W1C.54) -- (PS.210) node[anchor=north west] {gradient};
 
   \draw[->] (PS.330) -- (WMC.115) node[anchor=south east]{$\theta$};
-  \draw[->] (WMC.90) -- (PS.340) node[anchor=south west]{gradien};
+  \draw[->] (WMC.90) -- (PS.340) node[anchor=south west]{gradient};
 
 \end{tikzpicture}
 \end{document}

@@ -1,0 +1,33 @@
+\section{Related Work}
+There have been studies related to compression and reduction of communication rounds. One previous study uses quantization and error-feedback\cite{Chen2022Efficient} for compression. There have also been study to reduce communications by using certain conditions to exclude workers from sending updates\cite{Chen2021CADA}.
+\subsection{CADA}
+Communication reduction has been studied before the development of CADA. The LAG method\cite{Chen2018LAG} previously studied has been shown to be ineffective with stochastic gradients\cite{Chen2021CADA}. Thus, CADA was developed. The rules used in CADA are developed in two variants. The first, CADA1, will calculate two stochastic gradient innovations on two different samples. Given $\theta^k$ is the parameter in the $k$-th iteration, $m$ is the worker index, $k$ is the current iteration, $\tau_m^k$ is the staleness of worker $m$ in the $k$-th iteration, we take one gradient innovation on sample $xi_m^k$
+\begin{equation*}
+  \tilde{\delta}_m^k = \nabla J(\theta^k;\xi_m^k) - \nabla J(\tilde{\theta};\xi_m^k)
+\end{equation*}
+and the other from sample $\xi_m^{k-\tau_m^k}$:
+\begin{equation*}
+  \tilde{\delta}_m^{k-\tau_m^k} = \nabla J(\tilde{\theta^{k-\tau_m^k}};\xi_m^{k-\tau_m^k}) - \nabla J(\tilde{\theta};\xi_m^{k-\tau_m^k}).
+\end{equation*}
+The condition for CADA1 then can be expressed as
+\begin{equation}
+  \|\tilde{\delta}_m^k - \tilde{\delta}_m^{k-\tau_m^k}\|^2 \leq \frac{c}{d_\mathrm{max}}\sum_{d=1}^{d_\mathrm{max}} \|\theta^{k+1-d} - \theta^{k-d}\|^2.
+\end{equation}
+For the second variant, CADA2, the conditions are expressed as
+\begin{equation}
+  \begin{split}
+    \|\nabla J(\theta^k;\xi_m^k) - \nabla J(\theta_m^{k-\tau_m^k};\xi_m^k)\|^2 \\
+    \leq
+    \frac{c}{d_\mathrm{max}} \sum_{d=1}^{d_\mathrm{max}} \| \theta^{k+1-d} - \theta^{k-d} \|^2.
+  \end{split}
+\end{equation}
+When the condition of CADA1 or CADA2 is fulfilled, then worker $m$ will not send parameter update, and the parameter server will reuse the stale stochastic gradient.
+
+\subsection{Efficient-Adam}
+Compression is used to reduce communication overhead by reducing the size of updates sent from and to parameter server. Previous studies have attempted to use quantized gradient to reduce bias \cite{Chen2022Efficient,Chen2021Quantized}. For Efficient-Adam, quantization is done with a chosen quantization function $\mathcal{Q}$ such that $\mathcal{Q}$ fulfills \autoref{quantdef}.
+\begin{definition}
+  \label{quantdef}
+  $\mathcal{Q}: \mathbb{X} \mapsto \mathbb{X}$ is a quantization mapping if there exist constants $\delta$ > 0 and $\delta' \geq 0$ such that the two inequalities hold: $\|x - \mathcal{Q}(x)\| \leq (1-\delta) \|x\| + \delta'$ and $\|\mathcal{Q} \| \leq (2-\delta)\|x\|$
+\end{definition}
+
+Quantization introduced in Efficient-Adam is done two-way, done in sending updates from workers to parameter server and in sending averaged update from parameter server to workers. The error-feedback technique is then used to reduce influence of errors from quantization. Error-feedback can be seen as delaying the update of parameters, where the algorithm may discard some information due to quantization without error-feedback.

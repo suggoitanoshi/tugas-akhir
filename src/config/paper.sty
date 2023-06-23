@@ -1,8 +1,23 @@
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts,amsthm}
-\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage[hidelinks]{hyperref}
 \usepackage{blindtext}
+\usepackage{multirow}
+\usepackage[mode=buildnew]{standalone}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\def\definitionautorefname{Definition}
+
+\def\algorithmautorefname{Algorithm}
+
 \bibliographystyle{config/IEEEtran}
+
+% Less hyphenation
+\hyphenpenalty=500
+\tolerance=1000
+\sloppy
